@@ -22,7 +22,9 @@ void Player::doCreate()
     bodyDef.angularDamping = 0.0f;
     bodyDef.linearDamping = 12.0f; // TODO?
     m_physicsObject = std::make_shared<jt::Box2DObject>(m_world, &bodyDef);
+
     m_shape = jt::dh::createShapeRect({ 15, 15 }, jt::colors::White, textureManager());
+    m_shape->setOffset(jt::OffsetMode::CENTER);
 }
 
 void Player::doUpdate(float const elapsed)
@@ -30,13 +32,32 @@ void Player::doUpdate(float const elapsed)
     m_shape->update(elapsed);
     auto kb = getGame()->input().keyboard();
     jt::Vector2f force { 0.0f, 0.0f };
+
+    auto pos = m_physicsObject->getPosition();
+    auto velocity = m_physicsObject->getVelocity();
+    auto const minPos = (m_isLeft ? 0.0f : 160.0f) + 10.0f;
+    auto const maxPos = (m_isLeft ? 0.0f : 160.0f) + 150.0f;
+
     if (kb->pressed(jt::KeyCode::Left) || kb->pressed(jt::KeyCode::A)) {
-        force.x -= GP::PlayerMoveForce() * 25.0f;
+        if (pos.x > minPos) {
+            force.x -= GP::PlayerMoveForce() * 25.0f;
+        }
     } else if (kb->pressed(jt::KeyCode::Right) || kb->pressed(jt::KeyCode::D)) {
-        force.x += GP::PlayerMoveForce() * 25.0f;
+        if (pos.x <= maxPos) {
+            force.x += GP::PlayerMoveForce() * 25.0f;
+        }
     }
 
     m_physicsObject->addForceToCenter(force);
+
+    if (pos.x < minPos) {
+        pos.x = minPos;
+        velocity.x = 0;
+    } else if (pos.x > maxPos) {
+        pos.x = maxPos;
+        velocity.x = 0;
+    }
+    m_physicsObject->setVelocity(velocity);
     m_shape->setPosition(m_physicsObject->getPosition());
 }
 
