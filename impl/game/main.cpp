@@ -1,4 +1,6 @@
 ﻿#include "main.hpp"
+
+#include "state_game.hpp"
 #include <action_commands/action_command_manager.hpp>
 #include <action_commands/basic_action_commands.hpp>
 #include <audio/audio/audio_impl.hpp>
@@ -59,9 +61,11 @@ int main(int /*argc*/, char* /*argv*/[])
     auto const gamepad0 = std::make_shared<jt::GamepadInput>(0);
     jt::InputManager input { mouse, keyboard, { gamepad0 } };
 
-    jt::AudioImpl audio {};
+    // jt::AudioImpl audio {};
+    // jt::StateManager stateManager { std::make_shared<StateStartWithButton>() };
 
-    jt::StateManager stateManager { std::make_shared<StateStartWithButton>() };
+    jt::null_objects::AudioNull audio;
+    jt::StateManager stateManager { std::make_shared<StateGame>() };
     jt::LoggingStateManager loggingStateManager { stateManager, logger };
 
     jt::ActionCommandManager actionCommandManager(logger);

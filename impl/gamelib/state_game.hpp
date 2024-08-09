@@ -3,8 +3,8 @@
 
 #include <box2dwrapper/box2d_world_interface.hpp>
 #include <game_state.hpp>
+#include <player.hpp>
 #include <memory>
-#include <vector>
 
 // fwd decls
 namespace jt {
@@ -24,12 +24,15 @@ private:
     std::shared_ptr<jt::Vignette> m_vignette;
     std::shared_ptr<Hud> m_hud;
     std::shared_ptr<jt::Box2DWorldInterface> m_world { nullptr };
-    
+
     bool m_running { true };
     bool m_hasEnded { false };
 
     int m_scoreP1 { 0 };
     int m_scoreP2 { 0 };
+
+    std::shared_ptr<Player> m_playerL { nullptr };
+    std::shared_ptr<Player> m_playerR { nullptr };
 
     void onCreate() override;
     void onEnter() override;

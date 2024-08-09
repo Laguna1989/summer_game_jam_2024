@@ -36,7 +36,15 @@ void StateGame::onCreate()
 
 void StateGame::onEnter() { }
 
-void StateGame::createPlayer() { }
+void StateGame::createPlayer()
+{
+    m_playerL = std::make_shared<Player>(m_world);
+    m_playerL->setLeft(true);
+    add(m_playerL);
+    m_playerR = std::make_shared<Player>(m_world);
+    m_playerR->setLeft(false);
+    add(m_playerR);
+}
 
 void StateGame::onUpdate(float const elapsed)
 {
