@@ -1,5 +1,7 @@
 ﻿#include "state_game.hpp"
 #include "line.hpp"
+#include "random/random.hpp"
+#include <bullet.hpp>
 #include <box2dwrapper/box2d_world_impl.hpp>
 #include <color/color.hpp>
 #include <game_interface.hpp>
@@ -25,6 +27,9 @@ void StateGame::onCreate()
     m_background->update(0.0f);
 
     createPlayer();
+
+    m_bullets = std::make_shared<jt::ObjectGroup<Bullet>>();
+    add(m_bullets);
 
     m_vignette = std::make_shared<jt::Vignette>(GP::GetScreenSize());
     add(m_vignette);
@@ -56,14 +61,13 @@ void StateGame::onUpdate(float const elapsed)
     if (m_running) {
         m_world->step(elapsed, GP::PhysicVelocityIterations(), GP::PhysicPositionIterations());
         // update game logic here
-        if (getGame()->input().keyboard()->justPressed(jt::KeyCode::A)) {
-            m_scoreP1++;
-            m_hud->getObserverScoreP1()->notify(m_scoreP1);
+        if (getGame()->input().keyboard()->justPressed(jt::KeyCode::X)) {
+            auto bullet = std::make_shared<Bullet>(m_world);
+            bullet->setIsLeft(jt::Random::getChance());
+            add(bullet);
+            m_bullets->push_back(bullet);
         }
-        if (getGame()->input().keyboard()->justPressed(jt::KeyCode::D)) {
-            m_scoreP2++;
-            m_hud->getObserverScoreP2()->notify(m_scoreP2);
-        }
+        if (getGame()->input().keyboard()->justPressed(jt::KeyCode::D)) { }
         if (getGame()->input().keyboard()->pressed(jt::KeyCode::LShift)
             && getGame()->input().keyboard()->pressed(jt::KeyCode::Escape)) {
             endGame();

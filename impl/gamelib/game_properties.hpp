@@ -46,6 +46,7 @@ public:
     static int PhysicPositionIterations();
     static jt::Vector2f PlayerSize();
     static float PlayerMoveForce();
+    static float ShotVelocity();
 };
 
 #endif

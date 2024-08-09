@@ -19,7 +19,6 @@ public:
     bool m_isLeft { false };
 
     std::shared_ptr<jt::Shape> m_shape { nullptr };
-
     std::shared_ptr<jt::Box2DObject> m_physicsObject;
 };
 

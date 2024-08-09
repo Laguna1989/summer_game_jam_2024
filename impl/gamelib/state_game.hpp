@@ -1,6 +1,8 @@
 ﻿#ifndef GAME_STATE_GAME_HPP
 #define GAME_STATE_GAME_HPP
 
+#include "bullet.hpp"
+#include "object_group.hpp"
 #include <box2dwrapper/box2d_world_interface.hpp>
 #include <game_state.hpp>
 #include <player.hpp>
@@ -36,6 +38,7 @@ private:
     std::shared_ptr<Player> m_playerR { nullptr };
 
     std::shared_ptr<jt::Line> m_line { nullptr };
+    std::shared_ptr<jt::ObjectGroup<Bullet>> m_bullets {};
 
     void onCreate() override;
     void onEnter() override;

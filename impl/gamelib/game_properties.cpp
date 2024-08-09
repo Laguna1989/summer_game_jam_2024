@@ -37,4 +37,6 @@ int GP::PhysicPositionIterations() { return 20; }
 
 jt::Vector2f GP::PlayerSize() { return jt::Vector2f { 16.0f, 16.0f }; }
 
-float GP::PlayerMoveForce() { return 40.0f; }
+float GP::PlayerMoveForce() { return 1000.0f; }
+
+float GP::ShotVelocity() { return 50.0f; }
