@@ -8,6 +8,7 @@
 
 // fwd decls
 namespace jt {
+class Line;
 class Shape;
 class Sprite;
 class Vignette;
@@ -33,6 +34,8 @@ private:
 
     std::shared_ptr<Player> m_playerL { nullptr };
     std::shared_ptr<Player> m_playerR { nullptr };
+
+    std::shared_ptr<jt::Line> m_line { nullptr };
 
     void onCreate() override;
     void onEnter() override;

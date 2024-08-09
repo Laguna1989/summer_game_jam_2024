@@ -1,4 +1,5 @@
 ﻿#include "state_game.hpp"
+#include "line.hpp"
 #include <box2dwrapper/box2d_world_impl.hpp>
 #include <color/color.hpp>
 #include <game_interface.hpp>
@@ -27,6 +28,10 @@ void StateGame::onCreate()
 
     m_vignette = std::make_shared<jt::Vignette>(GP::GetScreenSize());
     add(m_vignette);
+
+    m_line = std::make_shared<jt::Line>(jt::Vector2f { 0.0f, GP::GetScreenSize().y });
+    m_line->setPosition({ GP::GetScreenSize().x / 2.0f, 0.0f });
+
     m_hud = std::make_shared<Hud>();
     add(m_hud);
 
@@ -67,6 +72,7 @@ void StateGame::onUpdate(float const elapsed)
 
     m_background->update(elapsed);
     m_vignette->update(elapsed);
+    m_line->update(elapsed);
 }
 
 void StateGame::onDraw() const
@@ -74,6 +80,7 @@ void StateGame::onDraw() const
     m_background->draw(renderTarget());
     drawObjects();
     m_vignette->draw();
+    m_line->draw(renderTarget());
     m_hud->draw();
 }
 
