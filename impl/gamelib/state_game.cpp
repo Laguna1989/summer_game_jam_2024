@@ -50,7 +50,11 @@ void StateGame::onCreate()
     setAutoDraw(false);
 }
 
-void StateGame::onEnter() { }
+void StateGame::onEnter()
+{
+    m_health = 100.0f;
+    m_hud->getObserverHealth()->notify(static_cast<int>(m_health));
+}
 
 void StateGame::updateShotCollisions(float elapsed)
 {
@@ -66,6 +70,7 @@ void StateGame::updateShotCollisions(float elapsed)
         if (minDist < 7.5f * 7.5f) {
             b->kill();
             m_health -= GP::ShotDamage();
+            m_hud->getObserverHealth()->notify(static_cast<int>(m_health));
         }
     }
 }

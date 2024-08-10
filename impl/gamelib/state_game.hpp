@@ -1,6 +1,7 @@
 ﻿#ifndef GAME_STATE_GAME_HPP
 #define GAME_STATE_GAME_HPP
 
+#include "text.hpp"
 #include <box2dwrapper/box2d_world_interface.hpp>
 #include <bullet.hpp>
 #include <bullet_spawn_info.hpp>
