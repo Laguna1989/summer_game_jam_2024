@@ -60,7 +60,6 @@ void StateMenu::createShapes()
 
 void StateMenu::createMenuText()
 {
-    createTextTitle();
     createTextStart();
     createTextExplanation();
     createTextCredits();
@@ -103,15 +102,6 @@ void StateMenu::createTextStart()
         renderTarget(), "Press Space to start the game", 16u, GP::PaletteFontFront());
     m_textStart->setPosition({ half_width, 70 });
     m_textStart->setShadow(GP::PaletteFontShadow(), jt::Vector2f { 2, 2 });
-}
-
-void StateMenu::createTextTitle()
-{
-    // float half_width = GP::GetScreenSize().x / 2;
-    // m_titleAnimation = std::make_shared<jt::Animation>();
-    // m_titleAnimation->loadFromAseprite("assets/titel.aseprite", textureManager());
-    // m_titleAnimation->play("idle");
-    // m_titleAnimation->setPosition({ half_width, 10 });
 }
 
 void StateMenu::createTweens()

@@ -43,7 +43,6 @@ private:
     void createMenuText();
     void createTextCredits();
     void createTextStart();
-    void createTextTitle();
 
     void createTweens();
     void createInstructionTweenColor1();
