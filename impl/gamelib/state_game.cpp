@@ -162,8 +162,10 @@ void StateGame::spawnNewBullets(float elapsed)
 void StateGame::createPlayer()
 {
     m_trailingCirclesL = std::make_shared<jt::TrailingCircles>();
+    m_trailingCirclesL->setColorMultiply(jt::Color { 100, 100, 100, 255 });
     add(m_trailingCirclesL);
     m_trailingCirclesR = std::make_shared<jt::TrailingCircles>();
+    m_trailingCirclesR->setAnimationFile("assets/squares.aseprite");
     add(m_trailingCirclesR);
 
     m_playerL = std::make_shared<Player>(m_world);

@@ -9,7 +9,7 @@ void jt::TrailingCircles::doCreate()
     m_particles = ParticleSystemType::createPS(
         [this]() {
             auto a = std::make_shared<jt::Animation>();
-            a->loadFromAseprite("assets/circles.aseprite", textureManager());
+            a->loadFromAseprite(m_animationName, textureManager());
             a->play("idle");
 
             a->setOffset(jt::OffsetMode::CENTER);
@@ -20,7 +20,7 @@ void jt::TrailingCircles::doCreate()
             auto const alpha = std::clamp(
                 static_cast<std::uint8_t>(jt::Random::getFloat(0.7f, 1.3f) * m_maxAlpha),
                 std::uint8_t { 0u }, std::uint8_t { 255u });
-            jt::Color startColor { 255u, 255u, 255u, alpha };
+            jt::Color startColor { m_colorMultiply.r, m_colorMultiply.g, m_colorMultiply.b, alpha };
             a->setColor(startColor);
             a->setPosition(pos);
             a->play("idle", 0, true);
@@ -59,6 +59,8 @@ void jt::TrailingCircles::doDraw() const
     m_particles->draw();
 }
 
+void jt::TrailingCircles::setAnimationFile(std::string const& name) { m_animationName = name; }
+
 void jt::TrailingCircles::setPosition(jt::Vector2f const& pos)
 {
     if (m_maxDistance > 0) {
@@ -86,3 +88,5 @@ void jt::TrailingCircles::setMaxDistanceToSpawnCircle(float maxDistance)
 {
     m_maxDistance = maxDistance;
 }
+
+void jt::TrailingCircles::setColorMultiply(jt::Color const& color) { m_colorMultiply = color; }

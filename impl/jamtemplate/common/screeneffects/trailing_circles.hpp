@@ -11,6 +11,7 @@ namespace jt {
 /// A trailing circles screen effect
 class TrailingCircles : public jt::GameObject {
 public:
+    void setAnimationFile(std::string const& name);
     /// setPosition for TrailingCircles
     /// \param pos Position of the TrailingCircles
     void setPosition(jt::Vector2f const& pos);
@@ -32,6 +33,7 @@ public:
 
     /// set the max distance to spawn a circle
     void setMaxDistanceToSpawnCircle(float maxDistance);
+    void setColorMultiply(jt::Color const& color);
 
 private:
     void doCreate() override;
@@ -40,8 +42,10 @@ private:
 
     using ParticleSystemType = jt::ParticleSystem<jt::Animation, 20u>;
 
+    std::string m_animationName { "assets/circles.aseprite" };
     std::shared_ptr<ParticleSystemType> m_particles;
     std::shared_ptr<jt::TweenCollection> m_tweens;
+    jt::Color m_colorMultiply { 255, 255, 255, 255 };
 
     jt::Vector2f m_pos;
     float m_timer { 0.0f };
