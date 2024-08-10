@@ -28,7 +28,7 @@ void StateGame::onCreate()
 
     m_background = std::make_shared<Shape>();
     m_background->makeRect({ w, h }, textureManager());
-    m_background->setColor(GP::PaletteBackground());
+    m_background->setColor(jt::Color { 27, 38, 50 });
     m_background->setIgnoreCamMovement(true);
     m_background->update(0.0f);
 
@@ -74,7 +74,8 @@ void StateGame::updateShotCollisions(float elapsed)
         auto const d1 = jt::MathHelper::distanceBetweenSquared(bp, pp1);
         auto const d2 = jt::MathHelper::distanceBetweenSquared(bp, pp2);
         auto minDist = std::min(d1, d2);
-        if (minDist < 7.5f * 7.5f) {
+        auto const collisionRange = 12.0f;
+        if (minDist < collisionRange * collisionRange) {
             b->kill();
             m_health -= GP::ShotDamage();
             m_hud->getObserverHealth()->notify(static_cast<int>(m_health));
