@@ -10,8 +10,8 @@ public:
     void spawnHorizontalLine(bool isLeft, float delay);
     void spawnHorizontalLineWithRandomMiss(bool isLeft, float delay);
     void spawnVerticalLineWithRandomMiss(bool isLeft, float delay);
-    void spawnSingleRandomHorizontal(bool isLeft, float delay);
-    void spawnSingleRandomVertical(bool isLeft, float delay);
+    void spawnSingleRandomHorizontal(bool isLeft, float delay, float velocityFactor = 1.0f);
+    void spawnSingleRandomVertical(bool isLeft, float delay, float velocityFactor);
 
 private:
     std::vector<BulletSpawnInfo>& m_bulletSpawnInfos;

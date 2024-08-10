@@ -7,7 +7,7 @@
 
 std::shared_ptr<ObserverInterface<int>> Hud::getObserverHealth() const { return m_healthDisplay; }
 
-std::shared_ptr<ObserverInterface<int>> Hud::getObserverScoreP2() const { return m_scoreP2Display; }
+std::shared_ptr<ObserverInterface<int>> Hud::getObserverScore() const { return m_scoreP2Display; }
 
 void Hud::doCreate()
 {

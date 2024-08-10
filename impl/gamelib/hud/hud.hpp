@@ -11,7 +11,7 @@ class ScoreDisplay;
 class Hud : public jt::GameObject {
 public:
     std::shared_ptr<ObserverInterface<int>> getObserverHealth() const;
-    std::shared_ptr<ObserverInterface<int>> getObserverScoreP2() const;
+    std::shared_ptr<ObserverInterface<int>> getObserverScore() const;
 
 private:
     std::shared_ptr<ScoreDisplay> m_healthDisplay;

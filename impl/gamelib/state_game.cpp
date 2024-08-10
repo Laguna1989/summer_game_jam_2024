@@ -95,6 +95,10 @@ void StateGame::spawnNewBullets(float elapsed)
     if (m_spawnTimer <= 0) {
 
         int stage = static_cast<int>(getAge()) / GP::StageTime();
+        int maxStage = 4;
+        if (stage > maxStage) {
+            stage = stage % (maxStage + 1);
+        }
         if (stage == 0) {
             m_bulletSpawner.spawnSingleRandomHorizontal(jt::Random::getChance(), 0.0f);
             m_bulletSpawner.spawnSingleRandomHorizontal(jt::Random::getChance(), 0.5f);
@@ -112,14 +116,14 @@ void StateGame::spawnNewBullets(float elapsed)
             m_bulletSpawner.spawnHorizontalLineWithRandomMiss(!flip, 1.6f);
             m_spawnTimer += 1.4f;
         } else if (stage == 2) {
-            m_bulletSpawner.spawnSingleRandomVertical(jt::Random::getChance(), 0.0f);
-            m_bulletSpawner.spawnSingleRandomVertical(jt::Random::getChance(), 0.5f);
-            m_bulletSpawner.spawnSingleRandomVertical(jt::Random::getChance(), 1.0f);
-            m_bulletSpawner.spawnSingleRandomVertical(jt::Random::getChance(), 1.5f);
-            m_bulletSpawner.spawnSingleRandomVertical(jt::Random::getChance(), 2.0f);
-            m_bulletSpawner.spawnSingleRandomVertical(jt::Random::getChance(), 2.5f);
-            m_bulletSpawner.spawnSingleRandomVertical(jt::Random::getChance(), 3.0f);
-            m_bulletSpawner.spawnSingleRandomVertical(jt::Random::getChance(), 3.5f);
+            m_bulletSpawner.spawnSingleRandomVertical(jt::Random::getChance(), 0.0f, 1.0f);
+            m_bulletSpawner.spawnSingleRandomVertical(jt::Random::getChance(), 0.5f, 1.0f);
+            m_bulletSpawner.spawnSingleRandomVertical(jt::Random::getChance(), 1.0f, 1.0f);
+            m_bulletSpawner.spawnSingleRandomVertical(jt::Random::getChance(), 1.5f, 1.0f);
+            m_bulletSpawner.spawnSingleRandomVertical(jt::Random::getChance(), 2.0f, 1.0f);
+            m_bulletSpawner.spawnSingleRandomVertical(jt::Random::getChance(), 2.5f, 1.0f);
+            m_bulletSpawner.spawnSingleRandomVertical(jt::Random::getChance(), 3.0f, 1.0f);
+            m_bulletSpawner.spawnSingleRandomVertical(jt::Random::getChance(), 3.5f, 1.0f);
             m_spawnTimer += 2.5f;
         } else if (stage == 3) {
             m_bulletSpawner.spawnHorizontalLineWithRandomMiss(true, 0.0f);
@@ -127,24 +131,42 @@ void StateGame::spawnNewBullets(float elapsed)
             m_bulletSpawner.spawnHorizontalLineWithRandomMiss(false, 2.8f);
             m_bulletSpawner.spawnHorizontalLineWithRandomMiss(false, 4.2f);
             m_spawnTimer += 4.0f;
-        } else if (stage == 4) {
-            m_bulletSpawner.spawnSingleRandomHorizontal(jt::Random::getChance(), 0.0f);
-            m_bulletSpawner.spawnSingleRandomHorizontal(jt::Random::getChance(), 0.4f);
-            m_bulletSpawner.spawnSingleRandomHorizontal(jt::Random::getChance(), 0.8f);
-            m_bulletSpawner.spawnSingleRandomHorizontal(jt::Random::getChance(), 1.2f);
-            m_bulletSpawner.spawnSingleRandomHorizontal(jt::Random::getChance(), 1.6f);
-            m_bulletSpawner.spawnSingleRandomHorizontal(jt::Random::getChance(), 2.0f);
-            m_bulletSpawner.spawnSingleRandomHorizontal(jt::Random::getChance(), 2.4f);
-            m_bulletSpawner.spawnSingleRandomHorizontal(jt::Random::getChance(), 2.8f);
+        } else if (stage == maxStage) {
+            float timeBetweenSpawnsFactor = 2.0f;
+            m_bulletSpawner.spawnSingleRandomHorizontal(
+                jt::Random::getChance(), timeBetweenSpawnsFactor * 0.0f, 0.5f);
+            m_bulletSpawner.spawnSingleRandomHorizontal(
+                jt::Random::getChance(), timeBetweenSpawnsFactor * 0.4f, 0.5f);
+            m_bulletSpawner.spawnSingleRandomHorizontal(
+                jt::Random::getChance(), timeBetweenSpawnsFactor * 0.8f, 0.5f);
+            m_bulletSpawner.spawnSingleRandomHorizontal(
+                jt::Random::getChance(), timeBetweenSpawnsFactor * 1.2f, 0.5f);
+            m_bulletSpawner.spawnSingleRandomHorizontal(
+                jt::Random::getChance(), timeBetweenSpawnsFactor * 1.6f, 0.5f);
+            m_bulletSpawner.spawnSingleRandomHorizontal(
+                jt::Random::getChance(), timeBetweenSpawnsFactor * 2.0f, 0.5f);
+            m_bulletSpawner.spawnSingleRandomHorizontal(
+                jt::Random::getChance(), timeBetweenSpawnsFactor * 2.4f, 0.5f);
+            m_bulletSpawner.spawnSingleRandomHorizontal(
+                jt::Random::getChance(), timeBetweenSpawnsFactor * 2.8f, 0.5f);
 
-            m_bulletSpawner.spawnSingleRandomVertical(jt::Random::getChance(), 0.0f + 0.2f);
-            m_bulletSpawner.spawnSingleRandomVertical(jt::Random::getChance(), 0.4f + 0.2f);
-            m_bulletSpawner.spawnSingleRandomVertical(jt::Random::getChance(), 0.8f + 0.2f);
-            m_bulletSpawner.spawnSingleRandomVertical(jt::Random::getChance(), 1.2f + 0.2f);
-            m_bulletSpawner.spawnSingleRandomVertical(jt::Random::getChance(), 1.6f + 0.2f);
-            m_bulletSpawner.spawnSingleRandomVertical(jt::Random::getChance(), 2.0f + 0.2f);
-            m_bulletSpawner.spawnSingleRandomVertical(jt::Random::getChance(), 2.4f + 0.2f);
-            m_bulletSpawner.spawnSingleRandomVertical(jt::Random::getChance(), 2.8f + 0.2f);
+            m_bulletSpawner.spawnSingleRandomVertical(
+                jt::Random::getChance(), timeBetweenSpawnsFactor * 0.0f + 0.2f, 0.5f);
+            m_bulletSpawner.spawnSingleRandomVertical(
+                jt::Random::getChance(), timeBetweenSpawnsFactor * 0.4f + 0.2f, 0.5f);
+            m_bulletSpawner.spawnSingleRandomVertical(
+                jt::Random::getChance(), timeBetweenSpawnsFactor * 0.8f + 0.2f, 0.5f);
+            m_bulletSpawner.spawnSingleRandomVertical(
+                jt::Random::getChance(), timeBetweenSpawnsFactor * 1.2f + 0.2f, 0.5f);
+            m_bulletSpawner.spawnSingleRandomVertical(
+                jt::Random::getChance(), timeBetweenSpawnsFactor * 1.6f + 0.2f, 0.5f);
+            m_bulletSpawner.spawnSingleRandomVertical(
+                jt::Random::getChance(), timeBetweenSpawnsFactor * 2.0f + 0.2f, 0.5f);
+            m_bulletSpawner.spawnSingleRandomVertical(
+                jt::Random::getChance(), timeBetweenSpawnsFactor * 2.4f + 0.2f, 0.5f);
+            m_bulletSpawner.spawnSingleRandomVertical(
+                jt::Random::getChance(), timeBetweenSpawnsFactor * 2.8f + 0.2f, 0.5f);
+            m_spawnTimer += 3.0f * timeBetweenSpawnsFactor;
         }
         m_spawnTimer += 4.0f;
     }
@@ -162,7 +184,10 @@ void StateGame::createPlayer()
 
 void StateGame::updateBulletSpawns(float const elapsed)
 {
-    m_velocityMultiplier = 1.0f + getAge() / (GP::StageTime() * 10.0f);
+    auto const velocityOffset = getAge() / (GP::StageTime() * 8.0f);
+    m_velocityMultiplier = 1.0f + velocityOffset;
+    m_hud->getObserverScore()->notify(velocityOffset * 100);
+
     for (auto& bsi : m_bulletSpawnInfos) {
         bsi.delay -= elapsed;
         if (bsi.delay <= 0.0f) {
@@ -170,7 +195,6 @@ void StateGame::updateBulletSpawns(float const elapsed)
             bullet->setAnimName(bsi.animationName);
             add(bullet);
             bullet->getPhysicsObject().lock()->setVelocity(bsi.velocity * m_velocityMultiplier);
-            ;
             bullet->getPhysicsObject().lock()->setPosition(bsi.position);
             bullet->setIsLeft(bsi.isLeft);
             m_bullets->push_back(bullet);
@@ -185,15 +209,6 @@ void StateGame::onUpdate(float const elapsed)
     if (m_running) {
         m_world->step(elapsed, GP::PhysicVelocityIterations(), GP::PhysicPositionIterations());
 
-        // update game logic here
-        // if (getGame()->input().keyboard()->justPressed(jt::KeyCode::X)) {
-        //     m_bulletSpawner.spawnHorizontalLineWithRandomMiss(true, 0.0f);
-        //     m_bulletSpawner.spawnHorizontalLineWithRandomMiss(false, 2.0f);
-        // }
-        // if (getGame()->input().keyboard()->justPressed(jt::KeyCode::Y)) {
-        //     m_bulletSpawner.spawnHorizontalLineWithRandomMiss(true, 0.0f);
-        //     m_bulletSpawner.spawnVerticalLineWithRandomMiss(false, 0.0f);
-        // }
         if (getGame()->input().keyboard()->justPressed(jt::KeyCode::D)) { }
         if (getGame()->input().keyboard()->pressed(jt::KeyCode::LShift)
             && getGame()->input().keyboard()->pressed(jt::KeyCode::Escape)) {
