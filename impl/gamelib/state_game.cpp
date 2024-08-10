@@ -65,6 +65,7 @@ void StateGame::updateShotCollisions(float elapsed)
         auto minDist = std::min(d1, d2);
         if (minDist < 7.5f * 7.5f) {
             b->kill();
+            m_health -= GP::ShotDamage();
         }
     }
 }
@@ -119,6 +120,10 @@ void StateGame::onUpdate(float const elapsed)
         updateBulletSpawns(elapsed);
 
         updateShotCollisions(elapsed);
+
+        if (m_health <= 0.0f) {
+            endGame();
+        }
     }
 
     m_background->update(elapsed);
@@ -144,7 +149,9 @@ void StateGame::endGame()
     m_hasEnded = true;
     m_running = false;
 
-    getGame()->stateManager().switchToStoredState("menu");
+    auto state = std::make_shared<StateMenu>();
+    // TODO set highscore
+    getGame()->stateManager().switchState(state);
 }
 
 std::string StateGame::getName() const { return "State Game"; }

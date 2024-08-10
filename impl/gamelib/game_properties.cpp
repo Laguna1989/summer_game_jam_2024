@@ -40,3 +40,5 @@ jt::Vector2f GP::PlayerSize() { return jt::Vector2f { 16.0f, 16.0f }; }
 float GP::PlayerMoveForce() { return 1000.0f; }
 
 float GP::ShotVelocity() { return 50.0f; }
+
+float GP::ShotDamage() { return 15.0f; }

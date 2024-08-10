@@ -47,6 +47,7 @@ private:
     std::vector<BulletSpawnInfo> m_bulletSpawnInfos;
     std::shared_ptr<jt::ObjectGroup<Bullet>> m_bullets {};
     BulletSpawner m_bulletSpawner;
+    float m_health { 100.0f };
 
     void onCreate() override;
     void onEnter() override;

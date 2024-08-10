@@ -47,6 +47,7 @@ public:
     static jt::Vector2f PlayerSize();
     static float PlayerMoveForce();
     static float ShotVelocity();
+    static float ShotDamage();
 };
 
 #endif
