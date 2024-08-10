@@ -11,7 +11,7 @@ Bullet::Bullet(std::shared_ptr<jt::Box2DWorldInterface> const& world)
 void Bullet::setIsLeft(bool isLeft)
 {
     m_isLeft = isLeft;
-    if (isLeft) {
+    if (!isLeft) {
         m_physicsObject->setPosition(
             m_physicsObject->getPosition() + jt::Vector2f { GP::GetScreenSize().x / 2, 0.0f });
     }
@@ -36,11 +36,16 @@ void Bullet::doUpdate(float const elapsed)
     m_shape->setPosition(m_physicsObject->getPosition());
     m_shape->update(elapsed);
     auto const pos = m_physicsObject->getPosition();
-    if (pos.y > GP::GetScreenSize().y) {
-        kill();
-    }
-    if (m_isLeft) {
-        if (pos.x > GP::GetScreenSize().x) { }
+
+    if (getAge() > 0.5f) {
+        if (pos.y > GP::GetScreenSize().y) {
+            kill();
+        }
+        if (m_isLeft) {
+            if (pos.x > GP::GetScreenSize().x / 2.0f) {
+                kill();
+            }
+        }
     }
 }
 
