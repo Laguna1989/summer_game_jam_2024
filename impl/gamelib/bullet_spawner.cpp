@@ -17,6 +17,9 @@ void BulletSpawner::spawnHorizontalLine(bool isLeft, float delay)
         bsi.velocity = jt::Vector2f { 0.0f, GP::ShotVelocity() };
         bsi.isLeft = isLeft;
         bsi.delay = delay;
+        if (isLeft) {
+            bsi.animationName = "assets/Lightball.aseprite";
+        }
         m_bulletSpawnInfos.push_back(bsi);
     }
 }
@@ -35,13 +38,16 @@ void BulletSpawner::spawnHorizontalLineWithRandomMiss(bool isLeft, float delay)
         bsi.velocity = jt::Vector2f { 0.0f, GP::ShotVelocity() };
         bsi.isLeft = isLeft;
         bsi.delay = delay;
+        if (isLeft) {
+            bsi.animationName = "assets/Lightball.aseprite";
+        }
         m_bulletSpawnInfos.push_back(bsi);
     }
 }
 
 void BulletSpawner::spawnVerticalLineWithRandomMiss(bool isLeft, float delay)
 {
-    int numberOfSpawn = 12;
+    int numberOfSpawn = 8;
     int missID = jt::Random::getInt(0, numberOfSpawn - 1);
     for (auto i = 0; i != numberOfSpawn; ++i) {
         if (i == missID) {
@@ -53,6 +59,10 @@ void BulletSpawner::spawnVerticalLineWithRandomMiss(bool isLeft, float delay)
         bsi.isLeft = isLeft;
         bsi.delay = delay;
         bsi.animationName = "assets/doc.aseprite";
+        if (isLeft) {
+            bsi.animationName = "assets/Lightball.aseprite";
+        }
+
         m_bulletSpawnInfos.push_back(bsi);
     }
 }
