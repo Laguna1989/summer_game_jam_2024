@@ -67,6 +67,7 @@ private:
     void endGame();
     void createPlayer();
     void updateBulletSpawns(float elapsed);
+    int getStage() const;
 };
 
 #endif

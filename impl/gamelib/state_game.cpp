@@ -107,7 +107,7 @@ void StateGame::spawnNewBullets(float elapsed)
     m_spawnTimer -= elapsed;
     if (m_spawnTimer <= 0) {
 
-        int stage = static_cast<int>(getAge()) / GP::StageTime();
+        int stage = getStage();
         int maxStage = 4;
         if (stage > maxStage) {
             stage = stage % (maxStage + 1);
@@ -191,9 +191,18 @@ void StateGame::createPlayer()
 
 void StateGame::updateBulletSpawns(float const elapsed)
 {
-    auto const velocityOffset = getAge() / (GP::StageTime() * 8.0f);
-    m_velocityMultiplier = 1.0f + velocityOffset;
     m_hud->getObserverScore()->notify(getAge());
+
+    auto const velocityOffset = std::sqrt(getAge() / (GP::StageTime() * 7.0f));
+    m_velocityMultiplier = 0.65f + velocityOffset;
+    float velocityMultiplierL = m_velocityMultiplier;
+    float velocityMultiplierR = m_velocityMultiplier;
+    if (m_velocityMultiplier >= 2.0f) {
+        if (getStage() > 4) {
+            velocityMultiplierL += getStage() % 2 == 0 ? 1.0f : 0.0f;
+            velocityMultiplierR += getStage() % 2 == 1 ? 1.0f : 0.0f;
+        }
+    }
 
     for (auto& bsi : m_bulletSpawnInfos) {
         bsi.delay -= elapsed;
@@ -201,7 +210,8 @@ void StateGame::updateBulletSpawns(float const elapsed)
             auto bullet = std::make_shared<Bullet>(m_world);
             bullet->setAnimName(bsi.animationName);
             add(bullet);
-            bullet->getPhysicsObject().lock()->setVelocity(bsi.velocity * m_velocityMultiplier);
+            auto const multiplier = bsi.isLeft ? velocityMultiplierL : velocityMultiplierR;
+            bullet->getPhysicsObject().lock()->setVelocity(bsi.velocity * multiplier);
             bullet->getPhysicsObject().lock()->setPosition(bsi.position);
             bullet->setIsLeft(bsi.isLeft);
             m_bullets->push_back(bullet);
@@ -209,6 +219,12 @@ void StateGame::updateBulletSpawns(float const elapsed)
     }
 
     std::erase_if(m_bulletSpawnInfos, [](auto const& bsi) { return bsi.delay <= 0.0f; });
+}
+
+int StateGame::getStage() const
+{
+    int const stage = static_cast<int>(getAge()) / GP::StageTime();
+    return stage;
 }
 
 void StateGame::onUpdate(float const elapsed)
