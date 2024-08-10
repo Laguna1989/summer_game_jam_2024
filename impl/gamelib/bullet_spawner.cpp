@@ -51,6 +51,7 @@ void BulletSpawner::spawnVerticalLineWithRandomMiss(bool isLeft, float delay)
         bsi.velocity = jt::Vector2f { GP::ShotVelocity(), 0.0f };
         bsi.isLeft = isLeft;
         bsi.delay = delay;
+        bsi.animationName = "assets/doc.aseprite";
         m_bulletSpawnInfos.push_back(bsi);
     }
 }

@@ -21,8 +21,8 @@ void StateGame::onCreate()
 {
     m_world = std::make_shared<jt::Box2DWorldImpl>(jt::Vector2f { 0.0f, 0.0f });
 
-    float const w = static_cast<float>(GP::GetWindowSize().x);
-    float const h = static_cast<float>(GP::GetWindowSize().y);
+    float const w = static_cast<float>(GP::GetScreenSize().x);
+    float const h = static_cast<float>(GP::GetScreenSize().y);
 
     using jt::Shape;
 
@@ -31,6 +31,13 @@ void StateGame::onCreate()
     m_background->setColor(GP::PaletteBackground());
     m_background->setIgnoreCamMovement(true);
     m_background->update(0.0f);
+
+    m_backgroundR = std::make_shared<Shape>();
+    m_backgroundR->makeRect({ w, h }, textureManager());
+    m_backgroundR->setColor(jt::Color { 15, 56, 15 });
+    m_backgroundR->setPosition({ w / 2, 0.0f });
+    m_backgroundR->setIgnoreCamMovement(true);
+    m_backgroundR->update(0.0f);
 
     createPlayer();
 
@@ -133,6 +140,7 @@ void StateGame::onUpdate(float const elapsed)
     }
 
     m_background->update(elapsed);
+    m_backgroundR->update(elapsed);
     m_vignette->update(elapsed);
     m_line->update(elapsed);
 }
@@ -140,6 +148,7 @@ void StateGame::onUpdate(float const elapsed)
 void StateGame::onDraw() const
 {
     m_background->draw(renderTarget());
+    m_backgroundR->draw(renderTarget());
     drawObjects();
     m_vignette->draw();
     m_line->draw(renderTarget());
