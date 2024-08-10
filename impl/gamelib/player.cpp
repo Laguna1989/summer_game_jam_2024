@@ -35,27 +35,47 @@ void Player::doUpdate(float const elapsed)
 
     auto pos = m_physicsObject->getPosition();
     auto velocity = m_physicsObject->getVelocity();
-    auto const minPos = (m_isLeft ? 0.0f : 160.0f) + 10.0f;
-    auto const maxPos = (m_isLeft ? 0.0f : 160.0f) + 150.0f;
+    auto const minPosX = (m_isLeft ? 0.0f : 160.0f) + 10.0f;
+    auto const minPosY = 10.0f;
+    auto const maxPosX = (m_isLeft ? 0.0f : 160.0f) + 150.0f;
+    auto const maxPosY = GP::GetScreenSize().y - 10.0f;
 
     if (kb->pressed(jt::KeyCode::Left) || kb->pressed(jt::KeyCode::A)) {
-        if (pos.x > minPos) {
+        if (pos.x > minPosX) {
             force.x -= GP::PlayerMoveForce();
         }
     } else if (kb->pressed(jt::KeyCode::Right) || kb->pressed(jt::KeyCode::D)) {
-        if (pos.x <= maxPos) {
+        if (pos.x <= maxPosX) {
             force.x += GP::PlayerMoveForce();
+        }
+    }
+
+    if (kb->pressed(jt::KeyCode::Up) || kb->pressed(jt::KeyCode::W)) {
+        if (pos.y >= minPosY) {
+            force.y -= GP::PlayerMoveForce();
+        }
+    }
+    if (kb->pressed(jt::KeyCode::Down) || kb->pressed(jt::KeyCode::S)) {
+        if (pos.y <= maxPosY) {
+            force.y += GP::PlayerMoveForce();
         }
     }
 
     m_physicsObject->addForceToCenter(force);
 
-    if (pos.x < minPos) {
-        pos.x = minPos;
+    if (pos.x < minPosX) {
+        pos.x = minPosX;
         velocity.x = 0;
-    } else if (pos.x > maxPos) {
-        pos.x = maxPos;
+    } else if (pos.x > maxPosX) {
+        pos.x = maxPosX;
         velocity.x = 0;
+    }
+    if (pos.y < minPosY) {
+        pos.y = minPosY;
+        velocity.y = 0;
+    } else if (pos.y > maxPosY) {
+        pos.y = maxPosY;
+        velocity.y = 0;
     }
     m_physicsObject->setVelocity(velocity);
     m_shape->setPosition(m_physicsObject->getPosition());
