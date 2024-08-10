@@ -1,6 +1,7 @@
 #ifndef PLAYER_HPP
 #define PLAYER_HPP
 
+#include "animation.hpp"
 #include "shape.hpp"
 #include <box2dwrapper/box2d_object.hpp>
 #include <game_object.hpp>
@@ -19,7 +20,7 @@ public:
 
     bool m_isLeft { false };
 
-    std::shared_ptr<jt::Shape> m_shape { nullptr };
+    std::shared_ptr<jt::Animation> m_animation { nullptr };
     std::shared_ptr<jt::Box2DObject> m_physicsObject;
 };
 

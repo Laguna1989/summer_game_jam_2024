@@ -23,13 +23,20 @@ void Player::doCreate()
     bodyDef.linearDamping = 12.0f;
     m_physicsObject = std::make_shared<jt::Box2DObject>(m_world, &bodyDef);
 
-    m_shape = jt::dh::createShapeRect({ 15, 15 }, jt::colors::White, textureManager());
-    m_shape->setOffset(jt::OffsetMode::CENTER);
+    m_animation = std::make_shared<jt::Animation>();
+    if (m_isLeft) {
+        m_animation->loadFromAseprite("assets/Dragon.aseprite", textureManager());
+    } else {
+        m_animation->loadFromAseprite("assets/Finger.aseprite", textureManager());
+    }
+    m_animation->play("loop");
+
+    m_animation->setOffset(jt::OffsetMode::CENTER);
 }
 
 void Player::doUpdate(float const elapsed)
 {
-    m_shape->update(elapsed);
+    m_animation->update(elapsed);
     auto kb = getGame()->input().keyboard();
     jt::Vector2f force { 0.0f, 0.0f };
 
@@ -78,9 +85,9 @@ void Player::doUpdate(float const elapsed)
         velocity.y = 0;
     }
     m_physicsObject->setVelocity(velocity);
-    m_shape->setPosition(m_physicsObject->getPosition());
+    m_animation->setPosition(m_physicsObject->getPosition());
 }
 
-void Player::doDraw() const { m_shape->draw(renderTarget()); }
+void Player::doDraw() const { m_animation->draw(renderTarget()); }
 
 jt::Vector2f Player::getPosition() const { return m_physicsObject->getPosition(); }
