@@ -20,6 +20,8 @@ public:
 
     jt::Vector2f m_position;
     bool m_isLeft { false };
+
+    std::shared_ptr<jt::Sprite> m_glowOverlay { nullptr };
 };
 
 #endif // HEART_HPP

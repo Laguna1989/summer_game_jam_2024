@@ -41,7 +41,6 @@ void Player::doCreate()
     m_arrowLeft->setOffset(jt::OffsetMode::CENTER);
 
     m_arrowRight = std::make_shared<jt::Animation>();
-
     m_arrowRight->loadFromAseprite("assets/arrow_" + type + "_right.aseprite", textureManager());
     m_arrowRight->play("loop");
     m_arrowRight->setAnimationSpeedFactor(jt::Random::getFloat(0.8f, 1.3f));
