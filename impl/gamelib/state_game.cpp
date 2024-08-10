@@ -1,8 +1,8 @@
 ﻿#include "state_game.hpp"
 #include "line.hpp"
 #include "random/random.hpp"
-#include <bullet.hpp>
 #include <box2dwrapper/box2d_world_impl.hpp>
+#include <bullet.hpp>
 #include <color/color.hpp>
 #include <game_interface.hpp>
 #include <game_properties.hpp>
@@ -10,6 +10,11 @@
 #include <screeneffects/vignette.hpp>
 #include <shape.hpp>
 #include <state_menu.hpp>
+
+StateGame::StateGame()
+    : m_bulletSpawner(m_bulletSpawnInfos)
+{
+}
 
 void StateGame::onCreate()
 {
@@ -62,16 +67,32 @@ void StateGame::onUpdate(float const elapsed)
         m_world->step(elapsed, GP::PhysicVelocityIterations(), GP::PhysicPositionIterations());
         // update game logic here
         if (getGame()->input().keyboard()->justPressed(jt::KeyCode::X)) {
-            auto bullet = std::make_shared<Bullet>(m_world);
-            bullet->setIsLeft(jt::Random::getChance());
-            add(bullet);
-            m_bullets->push_back(bullet);
+            m_bulletSpawner.spawnHorizontalLineWithRandomMiss(true, 0.0f);
+            m_bulletSpawner.spawnHorizontalLineWithRandomMiss(false, 2.0f);
+        }
+        if (getGame()->input().keyboard()->justPressed(jt::KeyCode::Y)) {
+            m_bulletSpawner.spawnHorizontalLineWithRandomMiss(true, 0.0f);
+            m_bulletSpawner.spawnVerticalLineWithRandomMiss(false, 0.0f);
         }
         if (getGame()->input().keyboard()->justPressed(jt::KeyCode::D)) { }
         if (getGame()->input().keyboard()->pressed(jt::KeyCode::LShift)
             && getGame()->input().keyboard()->pressed(jt::KeyCode::Escape)) {
             endGame();
         }
+
+        for (auto& bsi : m_bulletSpawnInfos) {
+            bsi.delay -= elapsed;
+            if (bsi.delay <= 0.0f) {
+                auto bullet = std::make_shared<Bullet>(m_world);
+                add(bullet);
+                bullet->getPhysicsObject().lock()->setVelocity(bsi.velocity);
+                bullet->getPhysicsObject().lock()->setPosition(bsi.position);
+                bullet->setIsLeft(bsi.isLeft);
+                m_bullets->push_back(bullet);
+            }
+        }
+
+        std::erase_if(m_bulletSpawnInfos, [](auto const& bsi) { return bsi.delay <= 0.0f; });
     }
 
     m_background->update(elapsed);

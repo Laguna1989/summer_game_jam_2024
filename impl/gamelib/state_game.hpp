@@ -1,12 +1,15 @@
 ﻿#ifndef GAME_STATE_GAME_HPP
 #define GAME_STATE_GAME_HPP
 
-#include "bullet.hpp"
-#include "object_group.hpp"
 #include <box2dwrapper/box2d_world_interface.hpp>
+#include <bullet.hpp>
+#include <bullet_spawn_info.hpp>
+#include <bullet_spawner.hpp>
 #include <game_state.hpp>
+#include <object_group.hpp>
 #include <player.hpp>
 #include <memory>
+#include <vector>
 
 // fwd decls
 namespace jt {
@@ -20,6 +23,8 @@ class Hud;
 
 class StateGame : public jt::GameState {
 public:
+    StateGame();
+
     std::string getName() const override;
 
 private:
@@ -38,7 +43,10 @@ private:
     std::shared_ptr<Player> m_playerR { nullptr };
 
     std::shared_ptr<jt::Line> m_line { nullptr };
+
+    std::vector<BulletSpawnInfo> m_bulletSpawnInfos;
     std::shared_ptr<jt::ObjectGroup<Bullet>> m_bullets {};
+    BulletSpawner m_bulletSpawner;
 
     void onCreate() override;
     void onEnter() override;

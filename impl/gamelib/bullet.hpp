@@ -12,6 +12,8 @@ public:
 
     void setIsLeft(bool isLeft);
 
+    std::weak_ptr<jt::Box2DObject> getPhysicsObject();
+
 private:
     void doCreate() override;
     void doUpdate(float const elapsed) override;
