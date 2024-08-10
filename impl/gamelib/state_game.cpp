@@ -94,9 +94,8 @@ void StateGame::spawnNewBullets(float elapsed)
     m_spawnTimer -= elapsed;
     if (m_spawnTimer <= 0) {
 
-        int stage = static_cast<int>(getAge()) / 30.0f;
+        int stage = static_cast<int>(getAge()) / GP::StageTime();
         if (stage == 0) {
-
             m_bulletSpawner.spawnSingleRandomHorizontal(jt::Random::getChance(), 0.0f);
             m_bulletSpawner.spawnSingleRandomHorizontal(jt::Random::getChance(), 0.5f);
             m_bulletSpawner.spawnSingleRandomHorizontal(jt::Random::getChance(), 1.0f);
@@ -105,17 +104,14 @@ void StateGame::spawnNewBullets(float elapsed)
             m_bulletSpawner.spawnSingleRandomHorizontal(jt::Random::getChance(), 2.5f);
             m_bulletSpawner.spawnSingleRandomHorizontal(jt::Random::getChance(), 3.0f);
             m_bulletSpawner.spawnSingleRandomHorizontal(jt::Random::getChance(), 3.5f);
-            m_spawnTimer += 2.5f;
-        }
-        else if (stage == 1) {
+            m_spawnTimer += 2.0f;
+        } else if (stage == 1) {
 
             bool flip = jt::Random::getChance();
             m_bulletSpawner.spawnHorizontalLineWithRandomMiss(flip, 0.0f);
             m_bulletSpawner.spawnHorizontalLineWithRandomMiss(!flip, 1.6f);
-            m_spawnTimer += 1.6f;
-        }
-        else if (stage == 2) {
-
+            m_spawnTimer += 1.4f;
+        } else if (stage == 2) {
             m_bulletSpawner.spawnSingleRandomVertical(jt::Random::getChance(), 0.0f);
             m_bulletSpawner.spawnSingleRandomVertical(jt::Random::getChance(), 0.5f);
             m_bulletSpawner.spawnSingleRandomVertical(jt::Random::getChance(), 1.0f);
@@ -125,13 +121,30 @@ void StateGame::spawnNewBullets(float elapsed)
             m_bulletSpawner.spawnSingleRandomVertical(jt::Random::getChance(), 3.0f);
             m_bulletSpawner.spawnSingleRandomVertical(jt::Random::getChance(), 3.5f);
             m_spawnTimer += 2.5f;
-        }
-        else if (stage == 3) {
+        } else if (stage == 3) {
             m_bulletSpawner.spawnHorizontalLineWithRandomMiss(true, 0.0f);
             m_bulletSpawner.spawnHorizontalLineWithRandomMiss(true, 1.4f);
             m_bulletSpawner.spawnHorizontalLineWithRandomMiss(false, 2.8f);
             m_bulletSpawner.spawnHorizontalLineWithRandomMiss(false, 4.2f);
-            m_spawnTimer += 4.2f;
+            m_spawnTimer += 4.0f;
+        } else if (stage == 4) {
+            m_bulletSpawner.spawnSingleRandomHorizontal(jt::Random::getChance(), 0.0f);
+            m_bulletSpawner.spawnSingleRandomHorizontal(jt::Random::getChance(), 0.4f);
+            m_bulletSpawner.spawnSingleRandomHorizontal(jt::Random::getChance(), 0.8f);
+            m_bulletSpawner.spawnSingleRandomHorizontal(jt::Random::getChance(), 1.2f);
+            m_bulletSpawner.spawnSingleRandomHorizontal(jt::Random::getChance(), 1.6f);
+            m_bulletSpawner.spawnSingleRandomHorizontal(jt::Random::getChance(), 2.0f);
+            m_bulletSpawner.spawnSingleRandomHorizontal(jt::Random::getChance(), 2.4f);
+            m_bulletSpawner.spawnSingleRandomHorizontal(jt::Random::getChance(), 2.8f);
+
+            m_bulletSpawner.spawnSingleRandomVertical(jt::Random::getChance(), 0.0f + 0.2f);
+            m_bulletSpawner.spawnSingleRandomVertical(jt::Random::getChance(), 0.4f + 0.2f);
+            m_bulletSpawner.spawnSingleRandomVertical(jt::Random::getChance(), 0.8f + 0.2f);
+            m_bulletSpawner.spawnSingleRandomVertical(jt::Random::getChance(), 1.2f + 0.2f);
+            m_bulletSpawner.spawnSingleRandomVertical(jt::Random::getChance(), 1.6f + 0.2f);
+            m_bulletSpawner.spawnSingleRandomVertical(jt::Random::getChance(), 2.0f + 0.2f);
+            m_bulletSpawner.spawnSingleRandomVertical(jt::Random::getChance(), 2.4f + 0.2f);
+            m_bulletSpawner.spawnSingleRandomVertical(jt::Random::getChance(), 2.8f + 0.2f);
         }
         m_spawnTimer += 4.0f;
     }
@@ -149,13 +162,15 @@ void StateGame::createPlayer()
 
 void StateGame::updateBulletSpawns(float const elapsed)
 {
+    m_velocityMultiplier = 1.0f + getAge() / (GP::StageTime() * 10.0f);
     for (auto& bsi : m_bulletSpawnInfos) {
         bsi.delay -= elapsed;
         if (bsi.delay <= 0.0f) {
             auto bullet = std::make_shared<Bullet>(m_world);
             bullet->setAnimName(bsi.animationName);
             add(bullet);
-            bullet->getPhysicsObject().lock()->setVelocity(bsi.velocity);
+            bullet->getPhysicsObject().lock()->setVelocity(bsi.velocity * m_velocityMultiplier);
+            ;
             bullet->getPhysicsObject().lock()->setPosition(bsi.position);
             bullet->setIsLeft(bsi.isLeft);
             m_bullets->push_back(bullet);

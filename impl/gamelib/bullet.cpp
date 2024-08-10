@@ -54,4 +54,12 @@ void Bullet::doUpdate(float const elapsed)
     }
 }
 
-void Bullet::doDraw() const { m_animation->draw(renderTarget()); }
+void Bullet::doDraw() const
+{
+    auto const pos = m_physicsObject->getPosition();
+    bool const isOnRightSide = pos.x > GP::GetScreenSize().x / 2.0f;
+    if (m_isLeft == isOnRightSide) {
+        return;
+    }
+    m_animation->draw(renderTarget());
+}

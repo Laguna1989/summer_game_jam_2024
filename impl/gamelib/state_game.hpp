@@ -51,6 +51,7 @@ private:
     BulletSpawner m_bulletSpawner;
     float m_health { 100.0f };
     float m_spawnTimer { 1.0f };
+    float m_velocityMultiplier { 1.0f };
 
     void onCreate() override;
     void onEnter() override;

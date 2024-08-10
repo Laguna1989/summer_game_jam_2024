@@ -42,3 +42,5 @@ float GP::PlayerMoveForce() { return 1000.0f; }
 float GP::ShotVelocity() { return 50.0f; }
 
 float GP::ShotDamage() { return 15.0f; }
+
+float GP::StageTime() { return 30.0f; }

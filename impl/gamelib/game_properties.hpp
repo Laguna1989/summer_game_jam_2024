@@ -1,7 +1,6 @@
 ﻿#ifndef GAME_GAMEPROPERTIES_HPP
 #define GAME_GAMEPROPERTIES_HPP
 
-#include "player.hpp"
 #include <color/color.hpp>
 #include <color/palette.hpp>
 #include <vector.hpp>
@@ -48,6 +47,7 @@ public:
     static float PlayerMoveForce();
     static float ShotVelocity();
     static float ShotDamage();
+    static float StageTime();
 };
 
 #endif

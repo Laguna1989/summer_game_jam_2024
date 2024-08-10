@@ -60,7 +60,7 @@ void BulletSpawner::spawnVerticalLineWithRandomMiss(bool isLeft, float delay)
         bsi.delay = delay;
         bsi.animationName = "assets/doc.aseprite";
         if (isLeft) {
-            bsi.animationName = "assets/Lightball.aseprite";
+            bsi.animationName = "assets/Fire.aseprite";
         }
 
         m_bulletSpawnInfos.push_back(bsi);
@@ -103,7 +103,7 @@ void BulletSpawner::spawnSingleRandomVertical(bool isLeft, float delay)
         bsi.delay = delay;
         bsi.animationName = "assets/doc.aseprite";
         if (isLeft) {
-            bsi.animationName = "assets/Lightball.aseprite";
+            bsi.animationName = "assets/Fire.aseprite";
         }
 
         m_bulletSpawnInfos.push_back(bsi);
