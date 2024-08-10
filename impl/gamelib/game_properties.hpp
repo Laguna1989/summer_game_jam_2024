@@ -10,13 +10,13 @@ class GP {
 public:
     GP() = delete;
 
-    static std::string GameName() { return "MyAwesomeGame"; }
+    static std::string GameName() { return "TwinStrike"; }
 
-    static std::string AuthorName() { return "TODO"; }
+    static std::string AuthorName() { return "ooBloodyOrangeoo & Laguna_999"; }
 
-    static std::string JamName() { return "TODO"; }
+    static std::string JamName() { return "Summer Game Jam"; }
 
-    static std::string JamDate() { return "TODO"; }
+    static std::string JamDate() { return "2024"; }
 
     static std::string ExplanationText()
     {

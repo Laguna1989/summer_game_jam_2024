@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.26)
-set(PROJECTNAME "SummerGameJam")
+set(PROJECTNAME "TwinStrike")
 project(${PROJECTNAME})
 
 ### Enable CCache

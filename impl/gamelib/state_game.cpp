@@ -55,6 +55,16 @@ void StateGame::onCreate()
 
     // StateGame will call drawObjects itself.
     setAutoDraw(false);
+
+    try {
+        auto music = getGame()->audio().getPermanentSound("music");
+        if (music == nullptr) {
+            music = getGame()->audio().addPermanentSound("music", "event:/music");
+            music->play();
+        }
+    } catch (std::exception const& e) {
+        getGame()->logger().error(e.what(), { "menu", "music" });
+    }
 }
 
 void StateGame::onEnter()
@@ -68,6 +78,9 @@ void StateGame::playerTakeDamage()
     m_health -= GP::ShotDamage();
     m_hud->getObserverHealth()->notify(static_cast<int>(m_health));
     getGame()->gfx().camera().shake(0.45f, 4.0f);
+
+    auto snd = getGame()->audio().addTemporarySound("event:/explosion");
+    snd->play();
 }
 
 void StateGame::updateShotCollisions(float elapsed)

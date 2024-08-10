@@ -7,7 +7,6 @@
 #include <input/input_manager.hpp>
 #include <lerp.hpp>
 #include <log/license_info.hpp>
-#include <algorithm>
 #include <screeneffects/vignette.hpp>
 #include <state_game.hpp>
 #include <state_manager/state_manager_transition_fade_to_black.hpp>
@@ -15,6 +14,7 @@
 #include <tweens/tween_alpha.hpp>
 #include <tweens/tween_color.hpp>
 #include <tweens/tween_position.hpp>
+#include <algorithm>
 
 void StateMenu::onCreate()
 {
@@ -26,6 +26,16 @@ void StateMenu::onCreate()
 
     getGame()->stateManager().setTransition(std::make_shared<jt::StateManagerTransitionFadeToBlack>(
         GP::GetScreenSize(), textureManager()));
+
+    try {
+        auto music = getGame()->audio().getPermanentSound("music");
+        if (music == nullptr) {
+            music = getGame()->audio().addPermanentSound("music", "event:/music");
+            music->play();
+        }
+    } catch (std::exception const& e) {
+        getGame()->logger().error(e.what(), { "menu", "music" });
+    }
 }
 
 void StateMenu::onEnter()
@@ -67,19 +77,18 @@ void StateMenu::createTextExplanation()
 void StateMenu::createTextCredits()
 {
     m_textCredits = jt::dh::createText(renderTarget(),
-        "Created by " + GP::AuthorName() + " for " + GP::JamName() + "\n" + GP::JamDate()
+        "Created by " + GP::AuthorName() + " for\n" + GP::JamName() + " " + GP::JamDate()
             + "\nF9 for License Information",
         14u, GP::PaletteFontCredits());
     m_textCredits->setTextAlign(jt::Text::TextAlign::LEFT);
-    m_textCredits->setPosition({ 10, GP::GetScreenSize().y - 70 });
+    m_textCredits->setPosition({ 10, GP::GetScreenSize().y - 48 });
     m_textCredits->setShadow(GP::PaletteFontShadow(), jt::Vector2f { 1, 1 });
 
     m_textVersion = jt::dh::createText(renderTarget(), "", 14u, GP::PaletteFontCredits());
     if (jt::BuildInfo::gitTagName() != "") {
         m_textVersion->setText(jt::BuildInfo::gitTagName());
     } else {
-        m_textVersion->setText(
-            jt::BuildInfo::gitCommitHash().substr(0, 6) + " " + jt::BuildInfo::timestamp());
+        m_textVersion->setText(jt::BuildInfo::gitCommitHash().substr(0, 6));
     }
     m_textVersion->setTextAlign(jt::Text::TextAlign::RIGHT);
     m_textVersion->setPosition({ GP::GetScreenSize().x - 5.0f, GP::GetScreenSize().y - 20.0f });
@@ -98,9 +107,10 @@ void StateMenu::createTextStart()
 void StateMenu::createTextTitle()
 {
     float half_width = GP::GetScreenSize().x / 2;
-    m_textTitle = jt::dh::createText(renderTarget(), GP::GameName(), 32u, GP::PaletteFontFront());
-    m_textTitle->setPosition({ half_width, 10 });
-    m_textTitle->setShadow(GP::PaletteFontShadow(), jt::Vector2f { 3, 3 });
+    m_titleAnimation = std::make_shared<jt::Animation>();
+    m_titleAnimation->loadFromAseprite("assets/titel.aseprite", textureManager());
+    m_titleAnimation->play("idle");
+    m_titleAnimation->setPosition({ half_width, 10 });
 }
 
 void StateMenu::createTweens()
@@ -147,7 +157,7 @@ void StateMenu::createTweenExplanation()
 
 void StateMenu::createTweenTitleAlpha()
 {
-    auto const tween = jt::TweenAlpha::create(m_textTitle, 0.55f, 0, 255);
+    auto const tween = jt::TweenAlpha::create(m_titleAnimation, 0.55f, 0, 255);
     tween->setStartDelay(0.2f);
     tween->setSkipTicks();
     add(tween);
@@ -190,7 +200,7 @@ void StateMenu::onUpdate(float const elapsed)
 void StateMenu::updateDrawables(float const& elapsed)
 {
     m_background->update(elapsed);
-    m_textTitle->update(elapsed);
+    m_titleAnimation->update(elapsed);
     m_textStart->update(elapsed);
     m_textExplanation->update(elapsed);
     m_textCredits->update(elapsed);
@@ -203,7 +213,7 @@ void StateMenu::checkForTransitionToStateGame()
 {
     auto const keysToTriggerTransition = { jt::KeyCode::Space, jt::KeyCode::Enter };
 
-    if (std::any_of(std::begin(keysToTriggerTransition),std::end(keysToTriggerTransition) ,
+    if (std::any_of(std::begin(keysToTriggerTransition), std::end(keysToTriggerTransition),
             [this](auto const k) { return getGame()->input().keyboard()->justPressed(k); })) {
         startTransitionToStateGame();
     }
@@ -222,9 +232,9 @@ void StateMenu::onDraw() const
 {
     m_background->draw(renderTarget());
 
-    m_textTitle->draw(renderTarget());
-    m_textStart->draw(renderTarget());
-    m_textExplanation->draw(renderTarget());
+    m_titleAnimation->draw(renderTarget());
+    // m_textStart->draw(renderTarget());
+    // m_textExplanation->draw(renderTarget());
     m_textCredits->draw(renderTarget());
     m_textVersion->draw(renderTarget());
     m_overlay->draw(renderTarget());
