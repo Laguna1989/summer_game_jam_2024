@@ -19,6 +19,8 @@ void Bullet::setIsLeft(bool isLeft)
 
 std::weak_ptr<jt::Box2DObject> Bullet::getPhysicsObject() { return m_physicsObject; }
 
+void Bullet::setAnimName(std::string const& string) { m_animName = string; }
+
 void Bullet::doCreate()
 {
     b2BodyDef bodyDef;
@@ -28,14 +30,16 @@ void Bullet::doCreate()
     bodyDef.angularDamping = 0.0f;
     m_physicsObject = std::make_shared<jt::Box2DObject>(m_world, &bodyDef);
 
-    m_shape = jt::dh::createShapeRect({ 6, 6 }, jt::colors::Green, textureManager());
-    m_shape->setOffset(jt::OffsetMode::CENTER);
+    m_animation = std::make_shared<jt::Animation>();
+    m_animation->loadFromAseprite(m_animName, textureManager());
+    m_animation->play("loop");
+    m_animation->setOffset(jt::OffsetMode::CENTER);
 }
 
 void Bullet::doUpdate(float const elapsed)
 {
-    m_shape->setPosition(m_physicsObject->getPosition());
-    m_shape->update(elapsed);
+    m_animation->setPosition(m_physicsObject->getPosition());
+    m_animation->update(elapsed);
     auto const pos = m_physicsObject->getPosition();
 
     if (getAge() > 0.5f) {
@@ -50,4 +54,4 @@ void Bullet::doUpdate(float const elapsed)
     }
 }
 
-void Bullet::doDraw() const { m_shape->draw(renderTarget()); }
+void Bullet::doDraw() const { m_animation->draw(renderTarget()); }

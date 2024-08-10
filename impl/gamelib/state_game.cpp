@@ -91,6 +91,7 @@ void StateGame::updateBulletSpawns(float const elapsed)
         bsi.delay -= elapsed;
         if (bsi.delay <= 0.0f) {
             auto bullet = std::make_shared<Bullet>(m_world);
+            bullet->setAnimName(bsi.animationName);
             add(bullet);
             bullet->getPhysicsObject().lock()->setVelocity(bsi.velocity);
             bullet->getPhysicsObject().lock()->setPosition(bsi.position);

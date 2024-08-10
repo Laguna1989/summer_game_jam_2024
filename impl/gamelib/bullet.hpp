@@ -1,6 +1,7 @@
 #ifndef ENEMY_HPP
 #define ENEMY_HPP
 
+#include "animation.hpp"
 #include "box2dwrapper/box2d_object.hpp"
 #include "box2dwrapper/box2d_world_interface.hpp"
 #include "shape.hpp"
@@ -13,6 +14,7 @@ public:
     void setIsLeft(bool isLeft);
 
     std::weak_ptr<jt::Box2DObject> getPhysicsObject();
+    void setAnimName(std::string const& string);
 
 private:
     void doCreate() override;
@@ -20,9 +22,10 @@ private:
     void doDraw() const override;
 
     bool m_isLeft { false };
+    std::string m_animName {};
 
     std::shared_ptr<jt::Box2DWorldInterface> m_world;
-    std::shared_ptr<jt::Shape> m_shape;
+    std::shared_ptr<jt::Animation> m_animation;
 
     std::shared_ptr<jt::Box2DObject> m_physicsObject;
 };
