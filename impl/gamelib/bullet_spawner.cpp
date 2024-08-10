@@ -24,7 +24,7 @@ void BulletSpawner::spawnHorizontalLine(bool isLeft, float delay)
     }
 }
 
-void BulletSpawner::spawnHorizontalLineWithRandomMiss(bool isLeft, float delay)
+void BulletSpawner::spawnHorizontalLineMovingDownWithRandomMiss(bool isLeft, float delay)
 {
     int numberOfSpawn = 8;
     int missID = jt::Random::getInt(0, numberOfSpawn - 1);
@@ -67,7 +67,7 @@ void BulletSpawner::spawnVerticalLineWithRandomMiss(bool isLeft, float delay)
     }
 }
 
-void BulletSpawner::spawnSingleRandomHorizontal(bool isLeft, float delay, float velocityFactor)
+void BulletSpawner::spawnSingleMovingDown(bool isLeft, float delay, float velocityFactor)
 {
     int numberOfSpawn = 8;
     int missID = jt::Random::getInt(0, numberOfSpawn - 1);
@@ -88,7 +88,7 @@ void BulletSpawner::spawnSingleRandomHorizontal(bool isLeft, float delay, float 
     }
 }
 
-void BulletSpawner::spawnSingleRandomVertical(bool isLeft, float delay, float velocityFactor)
+void BulletSpawner::spawnSingleMovingRight(bool isLeft, float delay, float velocityFactor)
 {
     int numberOfSpawn = 8;
     int missID = jt::Random::getInt(0, numberOfSpawn - 1);
@@ -104,6 +104,29 @@ void BulletSpawner::spawnSingleRandomVertical(bool isLeft, float delay, float ve
         bsi.animationName = "assets/doc.aseprite";
         if (isLeft) {
             bsi.animationName = "assets/Fire.aseprite";
+        }
+
+        m_bulletSpawnInfos.push_back(bsi);
+    }
+}
+
+void BulletSpawner::spawnSingleMovingLeft(bool isLeft, float delay, float velocityFactor)
+{
+    int numberOfSpawn = 8;
+    int missID = jt::Random::getInt(0, numberOfSpawn - 1);
+    for (auto i = 0; i != numberOfSpawn; ++i) {
+        if (i != missID) {
+            continue;
+        }
+        BulletSpawnInfo bsi;
+        bsi.position = jt::Vector2f { GP::GetScreenSize().x / 2.0f,
+            GP::GetScreenSize().y / numberOfSpawn * i };
+        bsi.velocity = jt::Vector2f { -GP::ShotVelocity() * velocityFactor, 0.0f };
+        bsi.isLeft = isLeft;
+        bsi.delay = delay;
+        bsi.animationName = "assets/clippy.aseprite";
+        if (isLeft) {
+            bsi.animationName = "assets/Green.aseprite";
         }
 
         m_bulletSpawnInfos.push_back(bsi);

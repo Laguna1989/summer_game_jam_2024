@@ -8,10 +8,11 @@ class BulletSpawner {
 public:
     explicit BulletSpawner(std::vector<BulletSpawnInfo>& bulletInfos);
     void spawnHorizontalLine(bool isLeft, float delay);
-    void spawnHorizontalLineWithRandomMiss(bool isLeft, float delay);
+    void spawnHorizontalLineMovingDownWithRandomMiss(bool isLeft, float delay);
     void spawnVerticalLineWithRandomMiss(bool isLeft, float delay);
-    void spawnSingleRandomHorizontal(bool isLeft, float delay, float velocityFactor = 1.0f);
-    void spawnSingleRandomVertical(bool isLeft, float delay, float velocityFactor);
+    void spawnSingleMovingDown(bool isLeft, float delay, float velocityFactor = 1.0f);
+    void spawnSingleMovingRight(bool isLeft, float delay, float velocityFactor = 1.0f);
+    void spawnSingleMovingLeft(bool isLeft, float delay, float velocityFactor = 1.0f);
 
 private:
     std::vector<BulletSpawnInfo>& m_bulletSpawnInfos;
