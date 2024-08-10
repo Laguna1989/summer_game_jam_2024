@@ -50,11 +50,13 @@ private:
 
     void onCreate() override;
     void onEnter() override;
+    void updateShotCollisions(float elapsed);
     void onUpdate(float const elapsed) override;
     void onDraw() const override;
 
     void endGame();
     void createPlayer();
+    void updateBulletSpawns(float elapsed);
 };
 
 #endif

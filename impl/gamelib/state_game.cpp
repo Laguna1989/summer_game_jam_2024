@@ -1,5 +1,6 @@
 ﻿#include "state_game.hpp"
 #include "line.hpp"
+#include "math_helper.hpp"
 #include "random/random.hpp"
 #include <box2dwrapper/box2d_world_impl.hpp>
 #include <bullet.hpp>
@@ -51,6 +52,23 @@ void StateGame::onCreate()
 
 void StateGame::onEnter() { }
 
+void StateGame::updateShotCollisions(float elapsed)
+{
+    for (auto const& bullet : *m_bullets) {
+        auto b = bullet.lock();
+        auto const bp = b->getPhysicsObject().lock()->getPosition();
+        auto const pp1 = m_playerL->getPosition();
+        auto const pp2 = m_playerR->getPosition();
+
+        auto const d1 = jt::MathHelper::distanceBetweenSquared(bp, pp1);
+        auto const d2 = jt::MathHelper::distanceBetweenSquared(bp, pp2);
+        auto minDist = std::min(d1, d2);
+        if (minDist < 7.5f * 7.5f) {
+            b->kill();
+        }
+    }
+}
+
 void StateGame::createPlayer()
 {
     m_playerL = std::make_shared<Player>(m_world);
@@ -61,10 +79,28 @@ void StateGame::createPlayer()
     add(m_playerR);
 }
 
+void StateGame::updateBulletSpawns(float const elapsed)
+{
+    for (auto& bsi : m_bulletSpawnInfos) {
+        bsi.delay -= elapsed;
+        if (bsi.delay <= 0.0f) {
+            auto bullet = std::make_shared<Bullet>(m_world);
+            add(bullet);
+            bullet->getPhysicsObject().lock()->setVelocity(bsi.velocity);
+            bullet->getPhysicsObject().lock()->setPosition(bsi.position);
+            bullet->setIsLeft(bsi.isLeft);
+            m_bullets->push_back(bullet);
+        }
+    }
+
+    std::erase_if(m_bulletSpawnInfos, [](auto const& bsi) { return bsi.delay <= 0.0f; });
+}
+
 void StateGame::onUpdate(float const elapsed)
 {
     if (m_running) {
         m_world->step(elapsed, GP::PhysicVelocityIterations(), GP::PhysicPositionIterations());
+
         // update game logic here
         if (getGame()->input().keyboard()->justPressed(jt::KeyCode::X)) {
             m_bulletSpawner.spawnHorizontalLineWithRandomMiss(true, 0.0f);
@@ -80,19 +116,9 @@ void StateGame::onUpdate(float const elapsed)
             endGame();
         }
 
-        for (auto& bsi : m_bulletSpawnInfos) {
-            bsi.delay -= elapsed;
-            if (bsi.delay <= 0.0f) {
-                auto bullet = std::make_shared<Bullet>(m_world);
-                add(bullet);
-                bullet->getPhysicsObject().lock()->setVelocity(bsi.velocity);
-                bullet->getPhysicsObject().lock()->setPosition(bsi.position);
-                bullet->setIsLeft(bsi.isLeft);
-                m_bullets->push_back(bullet);
-            }
-        }
+        updateBulletSpawns(elapsed);
 
-        std::erase_if(m_bulletSpawnInfos, [](auto const& bsi) { return bsi.delay <= 0.0f; });
+        updateShotCollisions(elapsed);
     }
 
     m_background->update(elapsed);

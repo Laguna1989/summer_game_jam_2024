@@ -13,6 +13,7 @@ public:
     void doCreate() override;
     void doUpdate(float const elapsed) override;
     void doDraw() const override;
+    jt::Vector2f getPosition() const;
 
     std::shared_ptr<jt::Box2DWorldInterface> m_world;
 

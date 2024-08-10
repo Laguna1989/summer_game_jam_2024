@@ -29,6 +29,7 @@ void Bullet::doCreate()
     m_physicsObject = std::make_shared<jt::Box2DObject>(m_world, &bodyDef);
 
     m_shape = jt::dh::createShapeRect({ 6, 6 }, jt::colors::Green, textureManager());
+    m_shape->setOffset(jt::OffsetMode::CENTER);
 }
 
 void Bullet::doUpdate(float const elapsed)

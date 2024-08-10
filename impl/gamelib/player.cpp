@@ -82,3 +82,5 @@ void Player::doUpdate(float const elapsed)
 }
 
 void Player::doDraw() const { m_shape->draw(renderTarget()); }
+
+jt::Vector2f Player::getPosition() const { return m_physicsObject->getPosition(); }
