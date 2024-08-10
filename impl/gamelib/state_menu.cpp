@@ -52,8 +52,9 @@ void StateMenu::createVignette()
 
 void StateMenu::createShapes()
 {
-    m_background
-        = jt::dh::createShapeRect(GP::GetScreenSize(), GP::PaletteBackground(), textureManager());
+    m_background = std::make_shared<jt::Animation>();
+    m_background->loadFromAseprite("assets/Titlescreen.aseprite", textureManager());
+    m_background->play("loop");
     m_overlay = jt::dh::createShapeRect(GP::GetScreenSize(), jt::colors::Black, textureManager());
 }
 
@@ -106,11 +107,11 @@ void StateMenu::createTextStart()
 
 void StateMenu::createTextTitle()
 {
-    float half_width = GP::GetScreenSize().x / 2;
-    m_titleAnimation = std::make_shared<jt::Animation>();
-    m_titleAnimation->loadFromAseprite("assets/titel.aseprite", textureManager());
-    m_titleAnimation->play("idle");
-    m_titleAnimation->setPosition({ half_width, 10 });
+    // float half_width = GP::GetScreenSize().x / 2;
+    // m_titleAnimation = std::make_shared<jt::Animation>();
+    // m_titleAnimation->loadFromAseprite("assets/titel.aseprite", textureManager());
+    // m_titleAnimation->play("idle");
+    // m_titleAnimation->setPosition({ half_width, 10 });
 }
 
 void StateMenu::createTweens()
@@ -157,10 +158,10 @@ void StateMenu::createTweenExplanation()
 
 void StateMenu::createTweenTitleAlpha()
 {
-    auto const tween = jt::TweenAlpha::create(m_titleAnimation, 0.55f, 0, 255);
-    tween->setStartDelay(0.2f);
-    tween->setSkipTicks();
-    add(tween);
+    // auto const tween = jt::TweenAlpha::create(m_titleAnimation, 0.55f, 0, 255);
+    // tween->setStartDelay(0.2f);
+    // tween->setSkipTicks();
+    // add(tween);
 }
 
 void StateMenu::createTweenOverlayAlpha()
@@ -200,7 +201,7 @@ void StateMenu::onUpdate(float const elapsed)
 void StateMenu::updateDrawables(float const& elapsed)
 {
     m_background->update(elapsed);
-    m_titleAnimation->update(elapsed);
+    // m_titleAnimation->update(elapsed);
     m_textStart->update(elapsed);
     m_textExplanation->update(elapsed);
     m_textCredits->update(elapsed);
@@ -232,7 +233,7 @@ void StateMenu::onDraw() const
 {
     m_background->draw(renderTarget());
 
-    m_titleAnimation->draw(renderTarget());
+    // m_titleAnimation->draw(renderTarget());
     // m_textStart->draw(renderTarget());
     // m_textExplanation->draw(renderTarget());
     m_textCredits->draw(renderTarget());
