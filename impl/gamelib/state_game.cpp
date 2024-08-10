@@ -63,6 +63,13 @@ void StateGame::onEnter()
     m_hud->getObserverHealth()->notify(static_cast<int>(m_health));
 }
 
+void StateGame::playerTakeDamage()
+{
+    m_health -= GP::ShotDamage();
+    m_hud->getObserverHealth()->notify(static_cast<int>(m_health));
+    getGame()->gfx().camera().shake(0.45f, 4.0f);
+}
+
 void StateGame::updateShotCollisions(float elapsed)
 {
     for (auto const& bullet : *m_bullets) {
@@ -77,9 +84,56 @@ void StateGame::updateShotCollisions(float elapsed)
         auto const collisionRange = 12.0f;
         if (minDist < collisionRange * collisionRange) {
             b->kill();
-            m_health -= GP::ShotDamage();
-            m_hud->getObserverHealth()->notify(static_cast<int>(m_health));
+            playerTakeDamage();
         }
+    }
+}
+
+void StateGame::spawnNewBullets(float elapsed)
+{
+    m_spawnTimer -= elapsed;
+    if (m_spawnTimer <= 0) {
+
+        int stage = static_cast<int>(getAge()) / 30.0f;
+        if (stage == 0) {
+
+            m_bulletSpawner.spawnSingleRandomHorizontal(jt::Random::getChance(), 0.0f);
+            m_bulletSpawner.spawnSingleRandomHorizontal(jt::Random::getChance(), 0.5f);
+            m_bulletSpawner.spawnSingleRandomHorizontal(jt::Random::getChance(), 1.0f);
+            m_bulletSpawner.spawnSingleRandomHorizontal(jt::Random::getChance(), 1.5f);
+            m_bulletSpawner.spawnSingleRandomHorizontal(jt::Random::getChance(), 2.0f);
+            m_bulletSpawner.spawnSingleRandomHorizontal(jt::Random::getChance(), 2.5f);
+            m_bulletSpawner.spawnSingleRandomHorizontal(jt::Random::getChance(), 3.0f);
+            m_bulletSpawner.spawnSingleRandomHorizontal(jt::Random::getChance(), 3.5f);
+            m_spawnTimer += 2.5f;
+        }
+        else if (stage == 1) {
+
+            bool flip = jt::Random::getChance();
+            m_bulletSpawner.spawnHorizontalLineWithRandomMiss(flip, 0.0f);
+            m_bulletSpawner.spawnHorizontalLineWithRandomMiss(!flip, 1.6f);
+            m_spawnTimer += 1.6f;
+        }
+        else if (stage == 2) {
+
+            m_bulletSpawner.spawnSingleRandomVertical(jt::Random::getChance(), 0.0f);
+            m_bulletSpawner.spawnSingleRandomVertical(jt::Random::getChance(), 0.5f);
+            m_bulletSpawner.spawnSingleRandomVertical(jt::Random::getChance(), 1.0f);
+            m_bulletSpawner.spawnSingleRandomVertical(jt::Random::getChance(), 1.5f);
+            m_bulletSpawner.spawnSingleRandomVertical(jt::Random::getChance(), 2.0f);
+            m_bulletSpawner.spawnSingleRandomVertical(jt::Random::getChance(), 2.5f);
+            m_bulletSpawner.spawnSingleRandomVertical(jt::Random::getChance(), 3.0f);
+            m_bulletSpawner.spawnSingleRandomVertical(jt::Random::getChance(), 3.5f);
+            m_spawnTimer += 2.5f;
+        }
+        else if (stage == 3) {
+            m_bulletSpawner.spawnHorizontalLineWithRandomMiss(true, 0.0f);
+            m_bulletSpawner.spawnHorizontalLineWithRandomMiss(true, 1.4f);
+            m_bulletSpawner.spawnHorizontalLineWithRandomMiss(false, 2.8f);
+            m_bulletSpawner.spawnHorizontalLineWithRandomMiss(false, 4.2f);
+            m_spawnTimer += 4.2f;
+        }
+        m_spawnTimer += 4.0f;
     }
 }
 
@@ -117,19 +171,21 @@ void StateGame::onUpdate(float const elapsed)
         m_world->step(elapsed, GP::PhysicVelocityIterations(), GP::PhysicPositionIterations());
 
         // update game logic here
-        if (getGame()->input().keyboard()->justPressed(jt::KeyCode::X)) {
-            m_bulletSpawner.spawnHorizontalLineWithRandomMiss(true, 0.0f);
-            m_bulletSpawner.spawnHorizontalLineWithRandomMiss(false, 2.0f);
-        }
-        if (getGame()->input().keyboard()->justPressed(jt::KeyCode::Y)) {
-            m_bulletSpawner.spawnHorizontalLineWithRandomMiss(true, 0.0f);
-            m_bulletSpawner.spawnVerticalLineWithRandomMiss(false, 0.0f);
-        }
+        // if (getGame()->input().keyboard()->justPressed(jt::KeyCode::X)) {
+        //     m_bulletSpawner.spawnHorizontalLineWithRandomMiss(true, 0.0f);
+        //     m_bulletSpawner.spawnHorizontalLineWithRandomMiss(false, 2.0f);
+        // }
+        // if (getGame()->input().keyboard()->justPressed(jt::KeyCode::Y)) {
+        //     m_bulletSpawner.spawnHorizontalLineWithRandomMiss(true, 0.0f);
+        //     m_bulletSpawner.spawnVerticalLineWithRandomMiss(false, 0.0f);
+        // }
         if (getGame()->input().keyboard()->justPressed(jt::KeyCode::D)) { }
         if (getGame()->input().keyboard()->pressed(jt::KeyCode::LShift)
             && getGame()->input().keyboard()->pressed(jt::KeyCode::Escape)) {
             endGame();
         }
+
+        spawnNewBullets(elapsed);
 
         updateBulletSpawns(elapsed);
 

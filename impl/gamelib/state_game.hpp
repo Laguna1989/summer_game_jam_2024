@@ -50,10 +50,13 @@ private:
     std::shared_ptr<jt::ObjectGroup<Bullet>> m_bullets {};
     BulletSpawner m_bulletSpawner;
     float m_health { 100.0f };
+    float m_spawnTimer { 1.0f };
 
     void onCreate() override;
     void onEnter() override;
+    void playerTakeDamage();
     void updateShotCollisions(float elapsed);
+    void spawnNewBullets(float elapsed);
     void onUpdate(float const elapsed) override;
     void onDraw() const override;
 
