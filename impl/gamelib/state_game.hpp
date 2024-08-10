@@ -1,6 +1,7 @@
 ﻿#ifndef GAME_STATE_GAME_HPP
 #define GAME_STATE_GAME_HPP
 
+#include "screeneffects/trailing_circles.hpp"
 #include "text.hpp"
 #include <box2dwrapper/box2d_world_interface.hpp>
 #include <bullet.hpp>
@@ -43,6 +44,8 @@ private:
 
     std::shared_ptr<Player> m_playerL { nullptr };
     std::shared_ptr<Player> m_playerR { nullptr };
+    std::shared_ptr<jt::TrailingCircles> m_trailingCirclesL { nullptr };
+    std::shared_ptr<jt::TrailingCircles> m_trailingCirclesR { nullptr };
 
     std::shared_ptr<jt::Line> m_line { nullptr };
 

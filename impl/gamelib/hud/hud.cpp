@@ -24,7 +24,7 @@ void Hud::doCreate()
     m_scoreP2Text->setIgnoreCamMovement(true);
     m_scoreP2Text->setPosition({ GP::GetScreenSize().x - 10, 4 });
 
-    m_scoreP2Display = std::make_shared<ScoreDisplay>(m_scoreP2Text, "P2 Score: ");
+    m_scoreP2Display = std::make_shared<ScoreDisplay>(m_scoreP2Text, "Time: ", "s");
 }
 
 void Hud::doUpdate(float const elapsed)

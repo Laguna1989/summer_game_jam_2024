@@ -161,6 +161,11 @@ void StateGame::spawnNewBullets(float elapsed)
 
 void StateGame::createPlayer()
 {
+    m_trailingCirclesL = std::make_shared<jt::TrailingCircles>();
+    add(m_trailingCirclesL);
+    m_trailingCirclesR = std::make_shared<jt::TrailingCircles>();
+    add(m_trailingCirclesR);
+
     m_playerL = std::make_shared<Player>(m_world);
     m_playerL->setLeft(true);
     add(m_playerL);
@@ -173,7 +178,7 @@ void StateGame::updateBulletSpawns(float const elapsed)
 {
     auto const velocityOffset = getAge() / (GP::StageTime() * 8.0f);
     m_velocityMultiplier = 1.0f + velocityOffset;
-    m_hud->getObserverScore()->notify(velocityOffset * 100);
+    m_hud->getObserverScore()->notify(getAge());
 
     for (auto& bsi : m_bulletSpawnInfos) {
         bsi.delay -= elapsed;
@@ -201,6 +206,9 @@ void StateGame::onUpdate(float const elapsed)
             && getGame()->input().keyboard()->pressed(jt::KeyCode::Escape)) {
             endGame();
         }
+
+        m_trailingCirclesL->setPosition(m_playerL->getPosition());
+        m_trailingCirclesR->setPosition(m_playerR->getPosition());
 
         spawnNewBullets(elapsed);
 
