@@ -1,6 +1,7 @@
 ﻿#ifndef GAME_STATE_GAME_HPP
 #define GAME_STATE_GAME_HPP
 
+#include "heart.hpp"
 #include "screeneffects/trailing_circles.hpp"
 #include "text.hpp"
 #include <box2dwrapper/box2d_world_interface.hpp>
@@ -56,11 +57,16 @@ private:
     float m_spawnTimer { 1.0f };
     float m_velocityMultiplier { 1.0f };
 
+    std::shared_ptr<jt::ObjectGroup<Heart>> m_hearts;
+
+    float m_spawnHeartTimer { 20.0f };
+
     void onCreate() override;
     void onEnter() override;
     void playerTakeDamage();
     void updateShotCollisions(float elapsed);
     void spawnNewBullets(float elapsed);
+    void updateHearts(float elapsed);
     void onUpdate(float const elapsed) override;
     void onDraw() const override;
 

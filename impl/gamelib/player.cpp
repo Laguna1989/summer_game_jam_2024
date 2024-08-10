@@ -16,7 +16,7 @@ void Player::doCreate()
 {
     b2BodyDef bodyDef;
     bodyDef.position.x = (m_isLeft ? 0 : 160) + 80;
-    bodyDef.position.y = GP::GetScreenSize().y - 32;
+    bodyDef.position.y = GP::GetScreenSize().y - 96;
     bodyDef.type = b2BodyType::b2_dynamicBody;
     bodyDef.fixedRotation = false;
     bodyDef.angularDamping = 0.0f;

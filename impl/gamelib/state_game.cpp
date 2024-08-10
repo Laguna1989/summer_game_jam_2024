@@ -44,6 +44,9 @@ void StateGame::onCreate()
     m_bullets = std::make_shared<jt::ObjectGroup<Bullet>>();
     add(m_bullets);
 
+    m_hearts = std::make_shared<jt::ObjectGroup<Heart>>();
+    add(m_hearts);
+
     m_vignette = std::make_shared<jt::Vignette>(GP::GetScreenSize());
     add(m_vignette);
 
@@ -172,6 +175,45 @@ void StateGame::spawnNewBullets(float elapsed)
     }
 }
 
+void StateGame::updateHearts(float elapsed)
+{
+    m_spawnHeartTimer -= elapsed;
+    if (m_health <= 25.0f) {
+        // faster hearts if below 25% health
+        m_spawnHeartTimer -= elapsed;
+    }
+
+    if (m_spawnHeartTimer <= 0) {
+        m_spawnHeartTimer += 25.0f;
+
+        auto h = std::make_shared<Heart>();
+        h->setIsLeft(jt::Random::getChance());
+        add(h);
+        m_hearts->push_back(h);
+    }
+
+    for (auto& heart : *m_hearts) {
+        auto h = heart.lock();
+        auto const hp = h->getPosition();
+        auto const plp = m_playerL->getPosition();
+        auto const prp = m_playerR->getPosition();
+
+        auto const distL = jt::MathHelper::distanceBetweenSquared(hp, plp);
+        auto const distR = jt::MathHelper::distanceBetweenSquared(hp, prp);
+        auto const minDistance = std::min(distL, distR);
+        auto const collisionRange = 15.0f;
+        if (minDistance <= collisionRange * collisionRange) {
+            h->kill();
+            if (m_health >= 100.0f) {
+                m_health += 5.0f;
+            } else {
+                m_health += 20.0f;
+            }
+            m_hud->getObserverHealth()->notify(m_health);
+        }
+    }
+}
+
 void StateGame::createPlayer()
 {
     m_trailingCirclesL = std::make_shared<jt::TrailingCircles>();
@@ -246,6 +288,8 @@ void StateGame::onUpdate(float const elapsed)
         updateBulletSpawns(elapsed);
 
         updateShotCollisions(elapsed);
+
+        updateHearts(elapsed);
 
         if (m_health <= 0.0f) {
             endGame();
