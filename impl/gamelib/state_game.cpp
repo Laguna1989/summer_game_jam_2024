@@ -173,7 +173,7 @@ void StateGame::createSpawnPatterns()
         m_bulletSpawner.spawnSingleMovingLeft(jt::Random::getChance(), 2.5f, 1.0f);
         m_bulletSpawner.spawnSingleMovingLeft(jt::Random::getChance(), 3.0f, 1.0f);
         m_bulletSpawner.spawnSingleMovingLeft(jt::Random::getChance(), 3.5f, 1.0f);
-        m_spawnTimer += 3.5f;
+        m_spawnTimer += 2.5f;
     });
     m_spawnPatterns.emplace_back([this]() {
         const bool flip = jt::Random::getChance();
@@ -203,14 +203,14 @@ void StateGame::createSpawnPatterns()
         m_bulletSpawner.spawnHorizontalCorridor(flip, getPos(2), 15.0f * timeFactor);
         m_bulletSpawner.spawnHorizontalCorridor(flip, getPos(1), 16.0f * timeFactor);
         m_bulletSpawner.spawnHorizontalCorridor(flip, getPos(0), 17.0f * timeFactor);
-        m_spawnTimer += 17.0f * timeFactor;
+        m_spawnTimer += 16.0f * timeFactor;
     });
     m_spawnPatterns.emplace_back([this]() {
         m_bulletSpawner.spawnHorizontalLineMovingDownWithRandomMiss(true, 0.0f);
         m_bulletSpawner.spawnHorizontalLineMovingDownWithRandomMiss(true, 1.75f);
         m_bulletSpawner.spawnHorizontalLineMovingDownWithRandomMiss(false, 3.5f);
         m_bulletSpawner.spawnHorizontalLineMovingDownWithRandomMiss(false, 5.25f);
-        m_spawnTimer += 5.5f;
+        m_spawnTimer += 4.5f;
     });
     m_spawnPatterns.emplace_back([this]() {
         constexpr float timeBetweenSpawnsFactor = 1.5f;
@@ -235,7 +235,7 @@ void StateGame::createSpawnPatterns()
         m_bulletSpawner.spawnSingleMovingLeft(
             jt::Random::getChance(), timeBetweenSpawnsFactor * 2.8f + 0.2f, velocityFactor);
 
-        m_spawnTimer += 3.0f * timeBetweenSpawnsFactor;
+        m_spawnTimer += 2.6f * timeBetweenSpawnsFactor;
     });
 }
 
@@ -319,7 +319,7 @@ void StateGame::updateBulletSpawns(float const elapsed)
     m_hud->getObserverScore()->notify(getAge());
 
     auto const velocityOffset = std::pow(getAge() / (GP::StageTime() * 7.0f), 0.75f);
-    m_velocityMultiplier = 0.65f + velocityOffset;
+    m_velocityMultiplier = 0.7f + velocityOffset;
 
     float velocityMultiplierL = m_velocityMultiplier;
     float velocityMultiplierR = m_velocityMultiplier;
@@ -328,9 +328,9 @@ void StateGame::updateBulletSpawns(float const elapsed)
         velocityMultiplierR += getStage() % 2 == 1 ? 0.2f : 0.0f;
     }
     float a = getAge();
-    if (a > 180.0f) {
-        a -= 180.0f;
-        m_velocityMultiplier = 0.65f + velocityOffset + a / 20.0f;
+    if (a > 120.0f) {
+        a -= 120.0f;
+        m_velocityMultiplier = 0.65f + velocityOffset + a / 15.0f;
     }
 
     m_windR->m_windSpeedFactor = m_velocityMultiplier;
