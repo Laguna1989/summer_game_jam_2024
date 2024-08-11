@@ -70,6 +70,12 @@ void jt::Star::doUpdate(float const elapsed)
 
     m_shape->update(elapsed);
     m_glow->update(elapsed);
+
+    m_shape->setPosition(m_shape->getPosition() + m_velocity * elapsed);
+    m_glow->setPosition(m_glow->getPosition() + m_velocity * elapsed);
+
+    jt::wrapOnScreen(*m_shape.get());
+    jt::wrapOnScreen(*m_glow.get());
 }
 
 void jt::Star::updateStarBrightness()
@@ -102,3 +108,5 @@ void jt::Star::setZ(int zLayer)
     m_shape->setZ(zLayer);
     m_glow->setZ(zLayer);
 }
+
+void jt::Star::setVelocity(jt::Vector2f const& velocity) { m_velocity = velocity; }

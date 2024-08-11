@@ -1,5 +1,6 @@
 
 #include "stars.hpp"
+#include <random/random.hpp>
 
 jt::Stars::Stars(std::size_t count, jt::Color const& col, jt::Vector2f const& screenSizeHint)
     : m_color { col }
@@ -54,5 +55,12 @@ void jt::Stars::setZ(int zLayer)
 {
     for (auto& star : m_stars) {
         star->setZ(zLayer);
+    }
+}
+
+void jt::Stars::setVelocity(jt::Vector2f const& velocity)
+{
+    for (auto& star : m_stars) {
+        star->setVelocity(velocity * jt::Random::getFloat(0.9f, 1.1f));
     }
 }

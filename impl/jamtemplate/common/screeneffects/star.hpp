@@ -14,6 +14,8 @@ public:
 
     void setZ(int zLayer);
 
+    void setVelocity(jt::Vector2f const& velocity);
+
 private:
     std::shared_ptr<jt::Shape> m_shape;
     std::shared_ptr<jt::Sprite> m_glow;
@@ -24,6 +26,9 @@ private:
     float m_rand3 { 0.0f };
     jt::Vector2f m_glowOffset { 0.0f, 0.0f };
     int m_glowSize { 0 };
+
+    // TODO make this code nice
+    jt::Vector2f m_velocity { 0.0f, 0.0f };
 
     void doCreate() override;
     void doUpdate(float const elapsed) override;

@@ -44,6 +44,11 @@ void StateGame::onCreate()
 
     createBackground(w, h);
 
+    m_starsL = std::make_shared<jt::Stars>(
+        20, jt::colors::White, jt::Vector2f { GP::GetScreenSize().x / 2, GP::GetScreenSize().y });
+    add(m_starsL);
+    m_starsL->setVelocity(jt::Vector2f { 0.0f, 10.0f });
+
     m_windR = std::make_shared<jt::WindParticles>(
         jt::Vector2f { GP::GetScreenSize().x, GP::GetScreenSize().y },
         std::vector<jt::Color> { jt::Color { 255, 255, 255, 80 }, jt::Color { 200, 205, 195, 120 },

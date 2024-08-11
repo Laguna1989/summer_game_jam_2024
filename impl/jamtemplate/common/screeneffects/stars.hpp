@@ -28,6 +28,8 @@ public:
     ///  set the z layer of the starfield
     void setZ(int zLayer);
 
+    void setVelocity(jt::Vector2f const& velocity);
+
 private:
     void doCreate() override;
     void doUpdate(float const elapsed) override;

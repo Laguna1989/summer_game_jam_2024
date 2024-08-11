@@ -2,6 +2,7 @@
 #define GAME_STATE_GAME_HPP
 
 #include "heart.hpp"
+#include "screeneffects/stars.hpp"
 #include "screeneffects/trailing_circles.hpp"
 #include "screeneffects/wind_particles.hpp"
 #include "text.hpp"
@@ -45,6 +46,7 @@ private:
     int m_scoreP1 { 0 };
     int m_scoreP2 { 0 };
 
+    std::shared_ptr<jt::Stars> m_starsL { nullptr };
     std::shared_ptr<jt::WindParticles> m_windR { nullptr };
     float m_windScaleFactor { 10.0f };
 
