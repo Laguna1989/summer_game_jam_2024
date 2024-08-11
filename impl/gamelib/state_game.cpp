@@ -152,11 +152,41 @@ void StateGame::createSpawnPatterns()
         m_bulletSpawner.spawnSingleMovingRight(jt::Random::getChance(), 0.5f, 1.0f);
         m_bulletSpawner.spawnSingleMovingRight(jt::Random::getChance(), 1.0f, 1.0f);
         m_bulletSpawner.spawnSingleMovingRight(jt::Random::getChance(), 1.5f, 1.0f);
-        m_bulletSpawner.spawnSingleMovingRight(jt::Random::getChance(), 2.0f, 1.0f);
-        m_bulletSpawner.spawnSingleMovingRight(jt::Random::getChance(), 2.5f, 1.0f);
-        m_bulletSpawner.spawnSingleMovingRight(jt::Random::getChance(), 3.0f, 1.0f);
-        m_bulletSpawner.spawnSingleMovingRight(jt::Random::getChance(), 3.5f, 1.0f);
+        m_bulletSpawner.spawnSingleMovingLeft(jt::Random::getChance(), 2.0f, 1.0f);
+        m_bulletSpawner.spawnSingleMovingLeft(jt::Random::getChance(), 2.5f, 1.0f);
+        m_bulletSpawner.spawnSingleMovingLeft(jt::Random::getChance(), 3.0f, 1.0f);
+        m_bulletSpawner.spawnSingleMovingLeft(jt::Random::getChance(), 3.5f, 1.0f);
         m_spawnTimer += 3.5f;
+    });
+    m_spawnPatterns.emplace_back([this]() {
+        const bool flip = jt::Random::getChance();
+        const bool flip2 = jt::Random::getChance();
+        auto getPos = [flip2](int x) {
+            if (flip2) {
+                return 8 - x;
+            }
+            return x;
+        };
+        float timeFactor = 0.6f;
+        m_bulletSpawner.spawnHorizontalCorridor(flip, getPos(0), 0.0f * timeFactor);
+        m_bulletSpawner.spawnHorizontalCorridor(flip, getPos(1), 1.0f * timeFactor);
+        m_bulletSpawner.spawnHorizontalCorridor(flip, getPos(2), 2.0f * timeFactor);
+        m_bulletSpawner.spawnHorizontalCorridor(flip, getPos(3), 3.0f * timeFactor);
+        m_bulletSpawner.spawnHorizontalCorridor(flip, getPos(4), 4.0f * timeFactor);
+        m_bulletSpawner.spawnHorizontalCorridor(flip, getPos(5), 5.0f * timeFactor);
+        m_bulletSpawner.spawnHorizontalCorridor(flip, getPos(6), 6.0f * timeFactor);
+        m_bulletSpawner.spawnHorizontalCorridor(flip, getPos(7), 7.0f * timeFactor);
+        m_bulletSpawner.spawnHorizontalCorridor(flip, getPos(8), 8.0f * timeFactor);
+        m_bulletSpawner.spawnHorizontalCorridor(flip, getPos(8), 9.0f * timeFactor);
+        m_bulletSpawner.spawnHorizontalCorridor(flip, getPos(7), 10.0f * timeFactor);
+        m_bulletSpawner.spawnHorizontalCorridor(flip, getPos(6), 11.0f * timeFactor);
+        m_bulletSpawner.spawnHorizontalCorridor(flip, getPos(5), 12.0f * timeFactor);
+        m_bulletSpawner.spawnHorizontalCorridor(flip, getPos(4), 13.0f * timeFactor);
+        m_bulletSpawner.spawnHorizontalCorridor(flip, getPos(3), 14.0f * timeFactor);
+        m_bulletSpawner.spawnHorizontalCorridor(flip, getPos(2), 15.0f * timeFactor);
+        m_bulletSpawner.spawnHorizontalCorridor(flip, getPos(1), 16.0f * timeFactor);
+        m_bulletSpawner.spawnHorizontalCorridor(flip, getPos(0), 17.0f * timeFactor);
+        m_spawnTimer += 17.0f * timeFactor;
     });
     m_spawnPatterns.emplace_back([this]() {
         m_bulletSpawner.spawnHorizontalLineMovingDownWithRandomMiss(true, 0.0f);

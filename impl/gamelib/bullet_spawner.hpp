@@ -14,6 +14,7 @@ public:
     void spawnSingleMovingRight(bool isLeft, float delay, float velocityFactor = 1.0f);
     void spawnSingleMovingLeft(bool isLeft, float delay, float velocityFactor = 1.0f);
 
+    void spawnHorizontalCorridor(bool isLeft, int xPos, float delay);
 private:
     std::vector<BulletSpawnInfo>& m_bulletSpawnInfos;
 };
