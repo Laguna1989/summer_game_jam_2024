@@ -318,17 +318,23 @@ void StateGame::updateBulletSpawns(float const elapsed)
 {
     m_hud->getObserverScore()->notify(getAge());
 
-    auto const velocityOffset = std::sqrt(getAge() / (GP::StageTime() * 7.0f));
+    auto const velocityOffset = std::pow(getAge() / (GP::StageTime() * 7.0f), 0.75f);
     m_velocityMultiplier = 0.65f + velocityOffset;
-    m_windR->m_windSpeedFactor = m_velocityMultiplier;
+
     float velocityMultiplierL = m_velocityMultiplier;
     float velocityMultiplierR = m_velocityMultiplier;
-    // if (m_velocityMultiplier >= 2.0f) {
     if (getStage() > m_spawnPatterns.size()) {
-        velocityMultiplierL += getStage() % 2 == 0 ? 0.5f : 0.0f;
-        velocityMultiplierR += getStage() % 2 == 1 ? 0.5f : 0.0f;
+        velocityMultiplierL += getStage() % 2 == 0 ? 0.2f : 0.0f;
+        velocityMultiplierR += getStage() % 2 == 1 ? 0.2f : 0.0f;
     }
-    // }
+    float a = getAge();
+    if (a > 180.0f) {
+        a -= 180.0f;
+        m_velocityMultiplier = 0.65f + velocityOffset + a / 20.0f;
+    }
+
+    m_windR->m_windSpeedFactor = m_velocityMultiplier;
+    m_starsL->setVelocity({ 0.0f, 10.0f * m_velocityMultiplier });
 
     for (auto& bsi : m_bulletSpawnInfos) {
         bsi.delay -= elapsed;
@@ -358,7 +364,10 @@ void StateGame::onUpdate(float const elapsed)
     if (m_running) {
         m_world->step(elapsed, GP::PhysicVelocityIterations(), GP::PhysicPositionIterations());
 
-        if (getGame()->input().keyboard()->justPressed(jt::KeyCode::D)) { }
+        if (getGame()->input().keyboard()->justPressed(jt::KeyCode::F5)
+            && getGame()->input().keyboard()->pressed(jt::KeyCode::LShift)) {
+            m_age += 30;
+        }
         if (getGame()->input().keyboard()->pressed(jt::KeyCode::LShift)
             && getGame()->input().keyboard()->pressed(jt::KeyCode::Escape)) {
             endGame();
