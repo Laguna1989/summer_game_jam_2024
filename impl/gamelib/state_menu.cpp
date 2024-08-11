@@ -246,6 +246,8 @@ void StateMenu::startTransitionToStateGame()
     if (!m_started) {
         m_started = true;
         m_overlay->flash(0.6f);
+        auto snd = getGame()->audio().addTemporarySound("event:/thunder");
+        snd->play();
     }
 }
 
