@@ -21,6 +21,8 @@ std::weak_ptr<jt::Box2DObject> Bullet::getPhysicsObject() { return m_physicsObje
 
 void Bullet::setAnimName(std::string const& string) { m_animName = string; }
 
+bool Bullet::getIsLeft() const { return m_isLeft; }
+
 void Bullet::doCreate()
 {
     b2BodyDef bodyDef;

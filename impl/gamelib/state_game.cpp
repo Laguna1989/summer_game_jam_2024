@@ -1,4 +1,6 @@
 ﻿#include "state_game.hpp"
+
+#include "drawable_helpers.hpp"
 #include "line.hpp"
 #include "math_helper.hpp"
 #include "random/random.hpp"
@@ -91,6 +93,9 @@ void StateGame::onCreate()
     }
 
     createSpawnPatterns();
+
+    m_overlay
+        = jt::dh::createShapeRect(GP::GetScreenSize(), jt::colors::Transparent, textureManager());
 }
 
 void StateGame::onEnter()
@@ -99,14 +104,25 @@ void StateGame::onEnter()
     m_hud->getObserverHealth()->notify(static_cast<int>(m_health));
 }
 
-void StateGame::playerTakeDamage()
+void StateGame::playerTakeDamage(bool isLeft)
 {
+    if (m_iframeTimer > 0.0f) {
+        return;
+    }
+    m_iframeTimer = 1.0f;
     m_health -= GP::ShotDamage();
     m_hud->getObserverHealth()->notify(static_cast<int>(m_health));
-    getGame()->gfx().camera().shake(0.45f, 4.0f);
+    getGame()->gfx().camera().shake(0.45f, 3.5f);
 
     auto snd = getGame()->audio().addTemporarySound("event:/explosion");
     snd->play();
+    m_overlay->flash(0.2f, jt::Color { 255, 255, 255, 100 });
+    auto p = m_playerR.get();
+    if (isLeft) {
+        p = m_playerL.get();
+    }
+    p->m_animation->shake(0.75f, 5, 0.01);
+    p->m_animation->flash(0.4f, jt::Color { 190, 38, 51, 255 });
 }
 
 void StateGame::updateShotCollisions(float elapsed)
@@ -123,7 +139,7 @@ void StateGame::updateShotCollisions(float elapsed)
         auto const collisionRange = 12.0f;
         if (minDist < collisionRange * collisionRange) {
             b->kill();
-            playerTakeDamage();
+            playerTakeDamage(b->getIsLeft());
         }
     }
 }
@@ -363,10 +379,12 @@ void StateGame::onUpdate(float const elapsed)
         }
     }
 
+    m_iframeTimer -= elapsed;
     m_backgroundL->update(elapsed);
     m_backgroundR->update(elapsed);
     m_vignette->update(elapsed);
     m_line->update(elapsed);
+    m_overlay->update(elapsed);
 }
 
 void StateGame::onDraw() const
@@ -375,6 +393,7 @@ void StateGame::onDraw() const
     m_backgroundR->draw(renderTarget());
     drawObjects();
     m_vignette->draw();
+    m_overlay->draw(renderTarget());
     m_line->draw(renderTarget());
     m_hud->draw();
 }

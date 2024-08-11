@@ -28,6 +28,7 @@ private:
 
     float m_flashTimer { -1.0f };
     float m_maxFlashTimer { -1.0f };
+    float m_maxFlashAlpha { 255.0f };
 
     jt::Color m_flashColor { jt::colors::White };
 };

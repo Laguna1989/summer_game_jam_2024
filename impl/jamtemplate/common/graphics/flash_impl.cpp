@@ -14,6 +14,7 @@ void jt::FlashImpl::doFlash(float t, jt::Color col)
     m_flashTimer = t;
     m_maxFlashTimer = t;
     m_flashColor = col;
+    m_maxFlashAlpha = col.a;
 
     doFlashImpl(t, col);
 }
@@ -28,7 +29,7 @@ void jt::FlashImpl::updateFlash(float elapsed)
         auto const a = (m_flashTimer / m_maxFlashTimer);
 
         auto col = doGetFlashColor();
-        col.a = static_cast<std::uint8_t>(a * 255.0f);
+        col.a = static_cast<std::uint8_t>(a * m_maxFlashAlpha);
         doSetFlashColor(col);
 
         m_flashTimer -= elapsed;

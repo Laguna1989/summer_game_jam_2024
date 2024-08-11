@@ -135,8 +135,7 @@ void BulletSpawner::spawnSingleMovingLeft(bool isLeft, float delay, float veloci
 
 void BulletSpawner::spawnHorizontalCorridor(bool isLeft, int xPos, float delay)
 {
-    int numberOfSpawn = 8;
-    int missID = xPos;
+    constexpr int numberOfSpawn = 8;
     for (auto i = 0; i != numberOfSpawn; ++i) {
         if (abs(i - xPos) <= 1) {
             continue;

@@ -63,6 +63,7 @@ private:
     std::vector<std::function<void()>> m_spawnPatterns;
 
     float m_health { 100.0f };
+    float m_iframeTimer { 0.0f };
     float m_spawnTimer { 1.0f };
     float m_velocityMultiplier { 1.0f };
 
@@ -70,9 +71,11 @@ private:
 
     float m_spawnHeartTimer { 20.0f };
 
+    std::shared_ptr<jt::Shape> m_overlay { nullptr };
+
     void onCreate() override;
     void onEnter() override;
-    void playerTakeDamage();
+    void playerTakeDamage(bool isLeft);
     void updateShotCollisions(float elapsed);
     void createSpawnPatterns();
     void spawnNewBullets(float elapsed);

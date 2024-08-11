@@ -15,6 +15,7 @@ public:
 
     std::weak_ptr<jt::Box2DObject> getPhysicsObject();
     void setAnimName(std::string const& string);
+    bool getIsLeft() const;
 
 private:
     void doCreate() override;
