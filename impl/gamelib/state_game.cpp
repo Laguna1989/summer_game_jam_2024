@@ -268,8 +268,8 @@ void StateGame::updateBulletSpawns(float const elapsed)
     float velocityMultiplierR = m_velocityMultiplier;
     // if (m_velocityMultiplier >= 2.0f) {
     if (getStage() > m_spawnPatterns.size()) {
-        velocityMultiplierL += getStage() % 2 == 0 ? 1.0f : 0.0f;
-        velocityMultiplierR += getStage() % 2 == 1 ? 1.0f : 0.0f;
+        velocityMultiplierL += getStage() % 2 == 0 ? 0.5f : 0.0f;
+        velocityMultiplierR += getStage() % 2 == 1 ? 0.5f : 0.0f;
     }
     // }
 

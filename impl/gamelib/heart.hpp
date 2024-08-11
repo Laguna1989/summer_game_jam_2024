@@ -17,6 +17,7 @@ public:
     std::shared_ptr<jt::Animation> m_animation { nullptr };
 
     bool m_hasStartedBlinking { false };
+    bool m_hasBeenPickedUp { false };
 
     jt::Vector2f m_position;
     bool m_isLeft { false };

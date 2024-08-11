@@ -20,7 +20,7 @@ void Heart::doCreate()
     m_animation->play("loop");
 
     m_position = jt::Random::getRandomPointIn(
-        jt::Rectf { 10.0f + (m_isLeft ? 0.0f : 160.0f), 10.0f, 140.0f, 220.0f });
+        jt::Rectf { 20.0f + (m_isLeft ? 0.0f : 160.0f), 30.0f, 120.0f, 180.0f });
     m_animation->setPosition(m_position);
     m_animation->setOffset(jt::OffsetMode::CENTER);
     m_animation->flash(0.25f);
