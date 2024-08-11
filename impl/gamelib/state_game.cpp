@@ -210,8 +210,8 @@ void StateGame::spawnNewBullets(float elapsed)
 void StateGame::updateHearts(float elapsed)
 {
     m_spawnHeartTimer -= elapsed;
-    if (m_health <= 25.0f) {
-        // faster hearts if below 25% health
+    if (m_health <= 45.0f) {
+        // faster hearts if below 45% health
         m_spawnHeartTimer -= elapsed;
     }
 
@@ -237,11 +237,14 @@ void StateGame::updateHearts(float elapsed)
         if (minDistance <= collisionRange * collisionRange) {
             h->kill();
             if (m_health >= 100.0f) {
+
                 m_health += 5.0f;
             } else {
                 m_health += 20.0f;
             }
             m_hud->getObserverHealth()->notify(m_health);
+            auto snd = getGame()->audio().addTemporarySound("event:/pickup");
+            snd->play();
         }
     }
 }
