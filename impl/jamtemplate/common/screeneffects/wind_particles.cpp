@@ -51,7 +51,10 @@ void jt::WindParticles::doDraw() const
         return;
     }
     for (auto const& s : m_shapes) {
+        auto const origPos = s->getPosition();
+        s->setPosition(origPos + m_offset);
         s->draw(renderTarget());
+        s->setPosition(origPos);
     }
 }
 

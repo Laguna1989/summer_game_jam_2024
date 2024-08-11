@@ -45,14 +45,15 @@ void StateGame::onCreate()
     createBackground(w, h);
 
     m_windL = std::make_shared<jt::WindParticles>(
-        jt::Vector2f { GP::GetScreenSize().x / 2.0f, GP::GetScreenSize().y },
+        jt::Vector2f { GP::GetScreenSize().x, GP::GetScreenSize().y },
         std::vector<jt::Color> { jt::Color { 255, 255, 255, 80 }, jt::Color { 200, 205, 195, 120 },
-            jt::Color { 130, 130, 165, 130 } });
-    m_windL->setNumberOfParticles(30.0f);
+            jt::Color { 130, 165, 130, 130 } });
+    m_windL->setNumberOfParticles(60.0f);
     m_windL->setWindDirection({ 0.0f, 50.0f });
     m_windL->setShapeSize({ m_windScaleFactor, m_windScaleFactor });
     m_windL->setScale(jt::Vector2f { 1.0f, 3.0f } / m_windScaleFactor);
     add(m_windL);
+    m_windL->m_offset = { -GP::GetScreenSize().x / 2, 0.0f };
 
     createPlayer();
 

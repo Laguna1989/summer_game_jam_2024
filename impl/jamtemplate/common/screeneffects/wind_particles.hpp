@@ -20,6 +20,8 @@ public:
 
     void setZ(int zLayer);
 
+    jt::Vector2f m_offset { 0.0f, 0.0f };
+
 private:
     void doCreate() override;
     void doUpdate(float const elapsed) override;
@@ -31,8 +33,6 @@ private:
     jt::Vector2f m_shapeSize { 8.0f, 2.0f };
     jt::Vector2f m_scale { 1.0f, 1.0f };
 
-public:
-private:
     std::vector<std::shared_ptr<jt::Shape>> m_shapes;
     std::vector<float> m_factors;
 
