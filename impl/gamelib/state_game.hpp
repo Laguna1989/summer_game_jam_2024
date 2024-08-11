@@ -59,6 +59,8 @@ private:
     std::vector<BulletSpawnInfo> m_bulletSpawnInfos;
     std::shared_ptr<jt::ObjectGroup<Bullet>> m_bullets {};
     BulletSpawner m_bulletSpawner;
+    std::vector<std::function<void()>> m_spawnPatterns;
+
     float m_health { 100.0f };
     float m_spawnTimer { 1.0f };
     float m_velocityMultiplier { 1.0f };
@@ -71,6 +73,7 @@ private:
     void onEnter() override;
     void playerTakeDamage();
     void updateShotCollisions(float elapsed);
+    void createSpawnPatterns();
     void spawnNewBullets(float elapsed);
     void updateHearts(float elapsed);
     void onUpdate(float const elapsed) override;

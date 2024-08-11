@@ -83,6 +83,8 @@ void StateGame::onCreate()
     } catch (std::exception const& e) {
         getGame()->logger().error(e.what(), { "menu", "music" });
     }
+
+    createSpawnPatterns();
 }
 
 void StateGame::onEnter()
@@ -120,72 +122,81 @@ void StateGame::updateShotCollisions(float elapsed)
     }
 }
 
+void StateGame::createSpawnPatterns()
+{
+    m_spawnPatterns.emplace_back([this]() {
+        m_bulletSpawner.spawnSingleMovingDown(jt::Random::getChance(), 0.0f);
+        m_bulletSpawner.spawnSingleMovingDown(jt::Random::getChance(), 0.5f);
+        m_bulletSpawner.spawnSingleMovingDown(jt::Random::getChance(), 1.0f);
+        m_bulletSpawner.spawnSingleMovingDown(jt::Random::getChance(), 1.5f);
+        m_bulletSpawner.spawnSingleMovingDown(jt::Random::getChance(), 2.0f);
+        m_bulletSpawner.spawnSingleMovingDown(jt::Random::getChance(), 2.5f);
+        m_bulletSpawner.spawnSingleMovingDown(jt::Random::getChance(), 3.0f);
+        m_bulletSpawner.spawnSingleMovingDown(jt::Random::getChance(), 3.5f);
+        m_spawnTimer += 2.0f;
+    });
+    m_spawnPatterns.emplace_back([this]() {
+        const bool flip = jt::Random::getChance();
+        m_bulletSpawner.spawnHorizontalLineMovingDownWithRandomMiss(flip, 0.0f);
+        m_bulletSpawner.spawnHorizontalLineMovingDownWithRandomMiss(!flip, 1.75f);
+        m_spawnTimer += 2.0f;
+    });
+    m_spawnPatterns.emplace_back([this]() {
+        m_bulletSpawner.spawnSingleMovingRight(jt::Random::getChance(), 0.0f, 1.0f);
+        m_bulletSpawner.spawnSingleMovingRight(jt::Random::getChance(), 0.5f, 1.0f);
+        m_bulletSpawner.spawnSingleMovingRight(jt::Random::getChance(), 1.0f, 1.0f);
+        m_bulletSpawner.spawnSingleMovingRight(jt::Random::getChance(), 1.5f, 1.0f);
+        m_bulletSpawner.spawnSingleMovingRight(jt::Random::getChance(), 2.0f, 1.0f);
+        m_bulletSpawner.spawnSingleMovingRight(jt::Random::getChance(), 2.5f, 1.0f);
+        m_bulletSpawner.spawnSingleMovingRight(jt::Random::getChance(), 3.0f, 1.0f);
+        m_bulletSpawner.spawnSingleMovingRight(jt::Random::getChance(), 3.5f, 1.0f);
+        m_spawnTimer += 2.5f;
+    });
+    m_spawnPatterns.emplace_back([this]() {
+        m_bulletSpawner.spawnHorizontalLineMovingDownWithRandomMiss(true, 0.0f);
+        m_bulletSpawner.spawnHorizontalLineMovingDownWithRandomMiss(true, 1.4f);
+        m_bulletSpawner.spawnHorizontalLineMovingDownWithRandomMiss(false, 2.8f);
+        m_bulletSpawner.spawnHorizontalLineMovingDownWithRandomMiss(false, 4.2f);
+        m_spawnTimer += 4.0f;
+    });
+    m_spawnPatterns.emplace_back([this]() {
+        float timeBetweenSpawnsFactor = 2.0f;
+        m_bulletSpawner.spawnSingleMovingDown(
+            jt::Random::getChance(), timeBetweenSpawnsFactor * 0.4f, 0.5f);
+        m_bulletSpawner.spawnSingleMovingDown(
+            jt::Random::getChance(), timeBetweenSpawnsFactor * 1.2f, 0.5f);
+        m_bulletSpawner.spawnSingleMovingDown(
+            jt::Random::getChance(), timeBetweenSpawnsFactor * 2.0f, 0.5f);
+        m_bulletSpawner.spawnSingleMovingDown(
+            jt::Random::getChance(), timeBetweenSpawnsFactor * 2.8f, 0.5f);
+
+        m_bulletSpawner.spawnSingleMovingRight(
+            jt::Random::getChance(), timeBetweenSpawnsFactor * 0.0f + 0.2f, 0.5f);
+        m_bulletSpawner.spawnSingleMovingLeft(
+            jt::Random::getChance(), timeBetweenSpawnsFactor * 0.8f + 0.2f, 0.5f);
+        m_bulletSpawner.spawnSingleMovingRight(
+            jt::Random::getChance(), timeBetweenSpawnsFactor * 1.6f + 0.2f, 0.5f);
+        m_bulletSpawner.spawnSingleMovingLeft(
+            jt::Random::getChance(), timeBetweenSpawnsFactor * 2.4f + 0.2f, 0.5f);
+        m_bulletSpawner.spawnSingleMovingLeft(
+            jt::Random::getChance(), timeBetweenSpawnsFactor * 2.8f + 0.2f, 0.5f);
+
+        m_spawnTimer += 3.0f * timeBetweenSpawnsFactor;
+    });
+}
+
 void StateGame::spawnNewBullets(float elapsed)
 {
+
     m_spawnTimer -= elapsed;
     if (m_spawnTimer <= 0) {
 
         int stage = getStage();
-        int maxStage = 4;
-        if (stage > maxStage) {
-            stage = stage % (maxStage + 1);
+        int maxStage = m_spawnPatterns.size();
+        if (stage >= maxStage) {
+            stage = stage % (maxStage);
         }
-        if (stage == 0) {
-            m_bulletSpawner.spawnSingleMovingDown(jt::Random::getChance(), 0.0f);
-            m_bulletSpawner.spawnSingleMovingDown(jt::Random::getChance(), 0.5f);
-            m_bulletSpawner.spawnSingleMovingDown(jt::Random::getChance(), 1.0f);
-            m_bulletSpawner.spawnSingleMovingDown(jt::Random::getChance(), 1.5f);
-            m_bulletSpawner.spawnSingleMovingDown(jt::Random::getChance(), 2.0f);
-            m_bulletSpawner.spawnSingleMovingDown(jt::Random::getChance(), 2.5f);
-            m_bulletSpawner.spawnSingleMovingDown(jt::Random::getChance(), 3.0f);
-            m_bulletSpawner.spawnSingleMovingDown(jt::Random::getChance(), 3.5f);
-            m_spawnTimer += 2.0f;
-        } else if (stage == 1) {
-
-            bool flip = jt::Random::getChance();
-            m_bulletSpawner.spawnHorizontalLineMovingDownWithRandomMiss(flip, 0.0f);
-            m_bulletSpawner.spawnHorizontalLineMovingDownWithRandomMiss(!flip, 1.6f);
-            m_spawnTimer += 1.4f;
-        } else if (stage == 2) {
-            m_bulletSpawner.spawnSingleMovingRight(jt::Random::getChance(), 0.0f, 1.0f);
-            m_bulletSpawner.spawnSingleMovingRight(jt::Random::getChance(), 0.5f, 1.0f);
-            m_bulletSpawner.spawnSingleMovingRight(jt::Random::getChance(), 1.0f, 1.0f);
-            m_bulletSpawner.spawnSingleMovingRight(jt::Random::getChance(), 1.5f, 1.0f);
-            m_bulletSpawner.spawnSingleMovingRight(jt::Random::getChance(), 2.0f, 1.0f);
-            m_bulletSpawner.spawnSingleMovingRight(jt::Random::getChance(), 2.5f, 1.0f);
-            m_bulletSpawner.spawnSingleMovingRight(jt::Random::getChance(), 3.0f, 1.0f);
-            m_bulletSpawner.spawnSingleMovingRight(jt::Random::getChance(), 3.5f, 1.0f);
-            m_spawnTimer += 2.5f;
-        } else if (stage == 3) {
-            m_bulletSpawner.spawnHorizontalLineMovingDownWithRandomMiss(true, 0.0f);
-            m_bulletSpawner.spawnHorizontalLineMovingDownWithRandomMiss(true, 1.4f);
-            m_bulletSpawner.spawnHorizontalLineMovingDownWithRandomMiss(false, 2.8f);
-            m_bulletSpawner.spawnHorizontalLineMovingDownWithRandomMiss(false, 4.2f);
-            m_spawnTimer += 4.0f;
-        } else if (stage == maxStage) {
-            float timeBetweenSpawnsFactor = 2.0f;
-            m_bulletSpawner.spawnSingleMovingDown(
-                jt::Random::getChance(), timeBetweenSpawnsFactor * 0.4f, 0.5f);
-            m_bulletSpawner.spawnSingleMovingDown(
-                jt::Random::getChance(), timeBetweenSpawnsFactor * 1.2f, 0.5f);
-            m_bulletSpawner.spawnSingleMovingDown(
-                jt::Random::getChance(), timeBetweenSpawnsFactor * 2.0f, 0.5f);
-            m_bulletSpawner.spawnSingleMovingDown(
-                jt::Random::getChance(), timeBetweenSpawnsFactor * 2.8f, 0.5f);
-
-            m_bulletSpawner.spawnSingleMovingRight(
-                jt::Random::getChance(), timeBetweenSpawnsFactor * 0.0f + 0.2f, 0.5f);
-            m_bulletSpawner.spawnSingleMovingLeft(
-                jt::Random::getChance(), timeBetweenSpawnsFactor * 0.8f + 0.2f, 0.5f);
-            m_bulletSpawner.spawnSingleMovingRight(
-                jt::Random::getChance(), timeBetweenSpawnsFactor * 1.6f + 0.2f, 0.5f);
-            m_bulletSpawner.spawnSingleMovingLeft(
-                jt::Random::getChance(), timeBetweenSpawnsFactor * 2.4f + 0.2f, 0.5f);
-            m_bulletSpawner.spawnSingleMovingLeft(
-                jt::Random::getChance(), timeBetweenSpawnsFactor * 2.8f + 0.2f, 0.5f);
-
-            m_spawnTimer += 3.0f * timeBetweenSpawnsFactor;
-        }
+        m_spawnPatterns.at(stage)();
         m_spawnTimer += 4.0f;
     }
 }
@@ -255,12 +266,12 @@ void StateGame::updateBulletSpawns(float const elapsed)
     m_windL->m_windSpeedFactor = m_velocityMultiplier;
     float velocityMultiplierL = m_velocityMultiplier;
     float velocityMultiplierR = m_velocityMultiplier;
-    if (m_velocityMultiplier >= 2.0f) {
-        if (getStage() > 4) {
-            velocityMultiplierL += getStage() % 2 == 0 ? 1.0f : 0.0f;
-            velocityMultiplierR += getStage() % 2 == 1 ? 1.0f : 0.0f;
-        }
+    // if (m_velocityMultiplier >= 2.0f) {
+    if (getStage() > m_spawnPatterns.size()) {
+        velocityMultiplierL += getStage() % 2 == 0 ? 1.0f : 0.0f;
+        velocityMultiplierR += getStage() % 2 == 1 ? 1.0f : 0.0f;
     }
+    // }
 
     for (auto& bsi : m_bulletSpawnInfos) {
         bsi.delay -= elapsed;
