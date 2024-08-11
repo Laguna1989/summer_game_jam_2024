@@ -117,6 +117,7 @@ void StateGame::playerTakeDamage(bool isLeft)
     auto snd = getGame()->audio().addTemporarySound("event:/explosion");
     snd->play();
     m_overlay->flash(0.2f, jt::Color { 255, 255, 255, 100 });
+
     auto p = m_playerR.get();
     if (isLeft) {
         p = m_playerL.get();
