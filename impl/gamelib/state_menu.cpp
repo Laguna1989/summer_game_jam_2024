@@ -43,6 +43,11 @@ void StateMenu::onCreate()
         8, jt::Vector2f { GP::GetScreenSize().x, 80.0f }, jt::Vector2f { 35.0f, 15.0f });
     m_clouds->setGameInstance(getGame());
     m_clouds->create();
+
+    m_highscoreText = jt::dh::createText(renderTarget(), "", 16u, { 247, 226, 107, 255 });
+    m_highscoreText->setText("Highscore: " + std::to_string(m_score));
+    m_highscoreText->setPosition({ 260, 47 });
+    m_highscoreText->setOutline(jt::Color { 10, 10, 10, 100 }, 1);
 }
 
 void StateMenu::onEnter()
@@ -213,6 +218,7 @@ void StateMenu::onUpdate(float const elapsed)
             m_switched = true;
         }
     }
+    m_highscoreText->update(elapsed);
 }
 
 void StateMenu::updateDrawables(float const& elapsed)
@@ -259,6 +265,7 @@ void StateMenu::onDraw() const
     m_unterLogo->draw(renderTarget());
     m_textCredits->draw(renderTarget());
     m_textVersion->draw(renderTarget());
+    m_highscoreText->draw(renderTarget());
     m_overlay->draw(renderTarget());
     m_vignette->draw();
 }

@@ -34,6 +34,8 @@ private:
     std::shared_ptr<jt::Shape> m_overlay;
     std::shared_ptr<jt::Vignette> m_vignette;
 
+    std::shared_ptr<jt::Text> m_highscoreText;
+
     int m_score { 0 };
 
     bool m_started { false };

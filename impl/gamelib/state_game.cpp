@@ -109,7 +109,7 @@ void StateGame::playerTakeDamage(bool isLeft)
     if (m_iframeTimer > 0.0f) {
         return;
     }
-    m_iframeTimer = 1.0f;
+    m_iframeTimer = 0.5f;
     m_health -= GP::ShotDamage();
     m_hud->getObserverHealth()->notify(static_cast<int>(m_health));
     getGame()->gfx().camera().shake(0.45f, 3.5f);
@@ -409,7 +409,7 @@ void StateGame::endGame()
     m_running = false;
 
     auto state = std::make_shared<StateMenu>();
-    // TODO set highscore
+    state->setScore(static_cast<int>(getAge()));
     getGame()->stateManager().switchState(state);
 }
 
