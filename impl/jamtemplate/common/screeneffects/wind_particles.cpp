@@ -36,6 +36,7 @@ void jt::WindParticles::doUpdate(float const elapsed)
     for (auto i = 0u; i != m_shapes.size(); ++i) {
         auto& s = m_shapes.at(i);
         s->setScale(m_scale);
+        s->setOrigin(m_offset);
         auto p = s->getPosition();
         //        float const f =
         p += m_windDirection * elapsed * m_windSpeedFactor * m_factors.at(i);
@@ -52,9 +53,11 @@ void jt::WindParticles::doDraw() const
     }
     for (auto const& s : m_shapes) {
         auto const origPos = s->getPosition();
-        s->setPosition(origPos + m_offset);
+        // s->setPosition(origPos + m_offset);
+        // s->update(0.0f);
         s->draw(renderTarget());
-        s->setPosition(origPos);
+        // s->setPosition(origPos);
+        // s->update(0.0f);
     }
 }
 
