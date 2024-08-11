@@ -328,9 +328,9 @@ void StateGame::updateBulletSpawns(float const elapsed)
         velocityMultiplierR += getStage() % 2 == 1 ? 0.2f : 0.0f;
     }
     float a = getAge();
-    if (a > 120.0f) {
-        a -= 120.0f;
-        m_velocityMultiplier = 0.65f + velocityOffset + a / 15.0f;
+    if (a > 100.0f) {
+        a -= 100.0f;
+        m_velocityMultiplier = 0.65f + velocityOffset + a / 12.0f;
     }
 
     m_windR->m_windSpeedFactor = m_velocityMultiplier;
