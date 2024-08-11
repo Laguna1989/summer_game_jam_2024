@@ -45,7 +45,6 @@ private:
     int m_scoreP1 { 0 };
     int m_scoreP2 { 0 };
 
-    std::shared_ptr<jt::WindParticles> m_windL { nullptr };
     std::shared_ptr<jt::WindParticles> m_windR { nullptr };
     float m_windScaleFactor { 10.0f };
 

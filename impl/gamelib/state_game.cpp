@@ -44,16 +44,16 @@ void StateGame::onCreate()
 
     createBackground(w, h);
 
-    m_windL = std::make_shared<jt::WindParticles>(
+    m_windR = std::make_shared<jt::WindParticles>(
         jt::Vector2f { GP::GetScreenSize().x, GP::GetScreenSize().y },
         std::vector<jt::Color> { jt::Color { 255, 255, 255, 80 }, jt::Color { 200, 205, 195, 120 },
             jt::Color { 130, 165, 130, 130 } });
-    m_windL->setNumberOfParticles(60.0f);
-    m_windL->setWindDirection({ 0.0f, 50.0f });
-    m_windL->setShapeSize({ m_windScaleFactor, m_windScaleFactor });
-    m_windL->setScale(jt::Vector2f { 1.0f, 3.0f } / m_windScaleFactor);
-    add(m_windL);
-    m_windL->m_offset = { -GP::GetScreenSize().x / 2, 0.0f };
+    m_windR->setNumberOfParticles(60.0f);
+    m_windR->setWindDirection({ 0.0f, 50.0f });
+    m_windR->setShapeSize({ m_windScaleFactor, m_windScaleFactor });
+    m_windR->setScale(jt::Vector2f { 1.0f, 3.0f } / m_windScaleFactor);
+    add(m_windR);
+    m_windR->m_offset = { -GP::GetScreenSize().x / 2, 0.0f };
 
     createPlayer();
 
@@ -264,7 +264,7 @@ void StateGame::updateBulletSpawns(float const elapsed)
 
     auto const velocityOffset = std::sqrt(getAge() / (GP::StageTime() * 7.0f));
     m_velocityMultiplier = 0.65f + velocityOffset;
-    m_windL->m_windSpeedFactor = m_velocityMultiplier;
+    m_windR->m_windSpeedFactor = m_velocityMultiplier;
     float velocityMultiplierL = m_velocityMultiplier;
     float velocityMultiplierR = m_velocityMultiplier;
     // if (m_velocityMultiplier >= 2.0f) {
