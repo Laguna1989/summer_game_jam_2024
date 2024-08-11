@@ -144,8 +144,8 @@ void StateGame::createSpawnPatterns()
     m_spawnPatterns.emplace_back([this]() {
         const bool flip = jt::Random::getChance();
         m_bulletSpawner.spawnHorizontalLineMovingDownWithRandomMiss(flip, 0.0f);
-        m_bulletSpawner.spawnHorizontalLineMovingDownWithRandomMiss(!flip, 1.75f);
-        m_spawnTimer += 2.0f;
+        m_bulletSpawner.spawnHorizontalLineMovingDownWithRandomMiss(!flip, 1.9f);
+        m_spawnTimer += 2.2f;
     });
     m_spawnPatterns.emplace_back([this]() {
         m_bulletSpawner.spawnSingleMovingRight(jt::Random::getChance(), 0.0f, 1.0f);
@@ -156,36 +156,37 @@ void StateGame::createSpawnPatterns()
         m_bulletSpawner.spawnSingleMovingRight(jt::Random::getChance(), 2.5f, 1.0f);
         m_bulletSpawner.spawnSingleMovingRight(jt::Random::getChance(), 3.0f, 1.0f);
         m_bulletSpawner.spawnSingleMovingRight(jt::Random::getChance(), 3.5f, 1.0f);
-        m_spawnTimer += 2.5f;
+        m_spawnTimer += 3.5f;
     });
     m_spawnPatterns.emplace_back([this]() {
         m_bulletSpawner.spawnHorizontalLineMovingDownWithRandomMiss(true, 0.0f);
-        m_bulletSpawner.spawnHorizontalLineMovingDownWithRandomMiss(true, 1.4f);
-        m_bulletSpawner.spawnHorizontalLineMovingDownWithRandomMiss(false, 2.8f);
-        m_bulletSpawner.spawnHorizontalLineMovingDownWithRandomMiss(false, 4.2f);
-        m_spawnTimer += 4.0f;
+        m_bulletSpawner.spawnHorizontalLineMovingDownWithRandomMiss(true, 1.75f);
+        m_bulletSpawner.spawnHorizontalLineMovingDownWithRandomMiss(false, 3.5f);
+        m_bulletSpawner.spawnHorizontalLineMovingDownWithRandomMiss(false, 5.25f);
+        m_spawnTimer += 5.5f;
     });
     m_spawnPatterns.emplace_back([this]() {
-        float timeBetweenSpawnsFactor = 2.0f;
+        constexpr float timeBetweenSpawnsFactor = 1.5f;
+        constexpr float velocityFactor = 0.75f;
         m_bulletSpawner.spawnSingleMovingDown(
-            jt::Random::getChance(), timeBetweenSpawnsFactor * 0.4f, 0.5f);
+            jt::Random::getChance(), timeBetweenSpawnsFactor * 0.4f, velocityFactor);
         m_bulletSpawner.spawnSingleMovingDown(
-            jt::Random::getChance(), timeBetweenSpawnsFactor * 1.2f, 0.5f);
+            jt::Random::getChance(), timeBetweenSpawnsFactor * 1.2f, velocityFactor);
         m_bulletSpawner.spawnSingleMovingDown(
-            jt::Random::getChance(), timeBetweenSpawnsFactor * 2.0f, 0.5f);
+            jt::Random::getChance(), timeBetweenSpawnsFactor * 2.0f, velocityFactor);
         m_bulletSpawner.spawnSingleMovingDown(
-            jt::Random::getChance(), timeBetweenSpawnsFactor * 2.8f, 0.5f);
+            jt::Random::getChance(), timeBetweenSpawnsFactor * 2.8f, velocityFactor);
 
         m_bulletSpawner.spawnSingleMovingRight(
-            jt::Random::getChance(), timeBetweenSpawnsFactor * 0.0f + 0.2f, 0.5f);
+            jt::Random::getChance(), timeBetweenSpawnsFactor * 0.0f + 0.2f, velocityFactor);
         m_bulletSpawner.spawnSingleMovingLeft(
-            jt::Random::getChance(), timeBetweenSpawnsFactor * 0.8f + 0.2f, 0.5f);
+            jt::Random::getChance(), timeBetweenSpawnsFactor * 0.8f + 0.2f, velocityFactor);
         m_bulletSpawner.spawnSingleMovingRight(
-            jt::Random::getChance(), timeBetweenSpawnsFactor * 1.6f + 0.2f, 0.5f);
+            jt::Random::getChance(), timeBetweenSpawnsFactor * 1.6f + 0.2f, velocityFactor);
         m_bulletSpawner.spawnSingleMovingLeft(
-            jt::Random::getChance(), timeBetweenSpawnsFactor * 2.4f + 0.2f, 0.5f);
+            jt::Random::getChance(), timeBetweenSpawnsFactor * 2.4f + 0.2f, velocityFactor);
         m_bulletSpawner.spawnSingleMovingLeft(
-            jt::Random::getChance(), timeBetweenSpawnsFactor * 2.8f + 0.2f, 0.5f);
+            jt::Random::getChance(), timeBetweenSpawnsFactor * 2.8f + 0.2f, velocityFactor);
 
         m_spawnTimer += 3.0f * timeBetweenSpawnsFactor;
     });
