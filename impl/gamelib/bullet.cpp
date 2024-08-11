@@ -52,6 +52,10 @@ void Bullet::doUpdate(float const elapsed)
             if (pos.x > GP::GetScreenSize().x / 2.0f) {
                 kill();
             }
+        } else {
+            if (pos.x < GP::GetScreenSize().x / 2.0f) {
+                kill();
+            }
         }
     }
 }
