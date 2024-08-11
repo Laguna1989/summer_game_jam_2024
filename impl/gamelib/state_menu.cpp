@@ -1,4 +1,6 @@
 ﻿#include "state_menu.hpp"
+
+#include "screeneffects/mario_clouds_horizontal.hpp"
 #include <build_info.hpp>
 #include <color/color.hpp>
 #include <drawable_helpers.hpp>
@@ -36,6 +38,11 @@ void StateMenu::onCreate()
     } catch (std::exception const& e) {
         getGame()->logger().error(e.what(), { "menu", "music" });
     }
+
+    m_clouds = std::make_shared<jt::MarioCloudsHorizontal>(
+        8, jt::Vector2f { GP::GetScreenSize().x, 80.0f }, jt::Vector2f { 35.0f, 15.0f });
+    m_clouds->setGameInstance(getGame());
+    m_clouds->create();
 }
 
 void StateMenu::onEnter()
@@ -55,6 +62,16 @@ void StateMenu::createShapes()
     m_background = std::make_shared<jt::Animation>();
     m_background->loadFromAseprite("assets/Titlescreen.aseprite", textureManager());
     m_background->play("loop");
+
+    m_logo = std::make_shared<jt::Animation>();
+    m_logo->loadFromAseprite("assets/logo.aseprite", textureManager());
+    m_logo->play("loop");
+
+    m_unterLogo = std::make_shared<jt::Animation>();
+    m_unterLogo->loadFromAseprite("assets/Unterlogo.aseprite", textureManager());
+    m_unterLogo->play("loop");
+    m_unterLogo->setPosition({ 132, 64 });
+
     m_overlay = jt::dh::createShapeRect(GP::GetScreenSize(), jt::colors::Black, textureManager());
 }
 
@@ -185,13 +202,24 @@ void StateMenu::createTweenCreditsPosition()
 void StateMenu::onUpdate(float const elapsed)
 {
     updateDrawables(elapsed);
+    m_clouds->update(elapsed);
     checkForTransitionToStateGame();
+    if (m_started) {
+        m_timerToStart += elapsed;
+    }
+    if (m_timerToStart >= 0.6f) {
+        if (!m_switched) {
+            getGame()->stateManager().switchState(std::make_shared<StateGame>());
+            m_switched = true;
+        }
+    }
 }
 
 void StateMenu::updateDrawables(float const& elapsed)
 {
     m_background->update(elapsed);
-    // m_titleAnimation->update(elapsed);
+    m_logo->update(elapsed);
+    m_unterLogo->update(elapsed);
     m_textStart->update(elapsed);
     m_textExplanation->update(elapsed);
     m_textCredits->update(elapsed);
@@ -202,6 +230,9 @@ void StateMenu::updateDrawables(float const& elapsed)
 
 void StateMenu::checkForTransitionToStateGame()
 {
+    if (m_started) {
+        return;
+    }
     auto const keysToTriggerTransition = { jt::KeyCode::Space, jt::KeyCode::Enter };
 
     if (std::any_of(std::begin(keysToTriggerTransition), std::end(keysToTriggerTransition),
@@ -214,18 +245,16 @@ void StateMenu::startTransitionToStateGame()
 {
     if (!m_started) {
         m_started = true;
-        getGame()->stateManager().storeCurrentState("menu");
-        getGame()->stateManager().switchState(std::make_shared<StateGame>());
+        m_overlay->flash(0.6f);
     }
 }
 
 void StateMenu::onDraw() const
 {
     m_background->draw(renderTarget());
-
-    // m_titleAnimation->draw(renderTarget());
-    // m_textStart->draw(renderTarget());
-    // m_textExplanation->draw(renderTarget());
+    m_clouds->draw();
+    m_logo->draw(renderTarget());
+    m_unterLogo->draw(renderTarget());
     m_textCredits->draw(renderTarget());
     m_textVersion->draw(renderTarget());
     m_overlay->draw(renderTarget());

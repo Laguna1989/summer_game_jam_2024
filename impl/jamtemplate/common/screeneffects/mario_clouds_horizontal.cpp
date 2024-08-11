@@ -34,7 +34,7 @@ void jt::MarioCloudsHorizontal::doCreate()
         anim->loadFromAseprite("assets/wolke.aseprite", textureManager());
         anim->play(anim->getRandomAnimationName());
         anim->setBlendMode(jt::BlendMode::ADD);
-        anim->setColor(jt::Color { 255, 255, 255, 200 });
+        anim->setColor(jt::Color { 200, 200, 200, 200 });
 
         anim->setPosition(jt::Random::getRandomPointIn(jt::Rectf { -m_margin.x, -m_margin.y,
             m_screnArea.x + m_margin.x * 2, m_screnArea.y + m_margin.y * 2 }));

@@ -4,6 +4,7 @@
 #include <game_state.hpp>
 
 namespace jt {
+class MarioCloudsHorizontal;
 
 class Text;
 class Shape;
@@ -21,6 +22,9 @@ public:
 
 private:
     std::shared_ptr<jt::Animation> m_background;
+    std::shared_ptr<jt::MarioCloudsHorizontal> m_clouds;
+    std::shared_ptr<jt::Animation> m_logo;
+    std::shared_ptr<jt::Animation> m_unterLogo;
 
     std::shared_ptr<jt::Animation> m_titleAnimation;
     std::shared_ptr<jt::Text> m_textStart;
@@ -34,6 +38,8 @@ private:
     int m_score { 0 };
 
     bool m_started { false };
+    float m_timerToStart { 0.0f };
+    bool m_switched {false};
 
     void onCreate() override;
     void onEnter() override;
