@@ -31,7 +31,6 @@ private:
     std::shared_ptr<jt::Text> m_textExplanation;
     std::shared_ptr<jt::Text> m_textCredits;
     std::shared_ptr<jt::Text> m_textVersion;
-
     std::shared_ptr<jt::Shape> m_overlay;
     std::shared_ptr<jt::Vignette> m_vignette;
 
@@ -39,7 +38,7 @@ private:
 
     bool m_started { false };
     float m_timerToStart { 0.0f };
-    bool m_switched {false};
+    bool m_switched { false };
 
     void onCreate() override;
     void onEnter() override;
