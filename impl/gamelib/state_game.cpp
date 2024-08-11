@@ -17,6 +17,22 @@ StateGame::StateGame()
 {
 }
 
+void StateGame::createBackground(float const w, float const h)
+{
+    m_backgroundL = std::make_shared<jt::Shape>();
+    m_backgroundL->makeRect({ w, h }, textureManager());
+    m_backgroundL->setColor(jt::Color { 27, 38, 50 });
+    m_backgroundL->setIgnoreCamMovement(true);
+    m_backgroundL->update(0.0f);
+
+    m_backgroundR = std::make_shared<jt::Shape>();
+    m_backgroundR->makeRect({ w, h }, textureManager());
+    m_backgroundR->setColor(jt::Color { 15, 56, 15 });
+    m_backgroundR->setPosition({ w / 2, 0.0f });
+    m_backgroundR->setIgnoreCamMovement(true);
+    m_backgroundR->update(0.0f);
+}
+
 void StateGame::onCreate()
 {
     m_world = std::make_shared<jt::Box2DWorldImpl>(jt::Vector2f { 0.0f, 0.0f });
@@ -26,18 +42,17 @@ void StateGame::onCreate()
 
     using jt::Shape;
 
-    m_background = std::make_shared<Shape>();
-    m_background->makeRect({ w, h }, textureManager());
-    m_background->setColor(jt::Color { 27, 38, 50 });
-    m_background->setIgnoreCamMovement(true);
-    m_background->update(0.0f);
+    createBackground(w, h);
 
-    m_backgroundR = std::make_shared<Shape>();
-    m_backgroundR->makeRect({ w, h }, textureManager());
-    m_backgroundR->setColor(jt::Color { 15, 56, 15 });
-    m_backgroundR->setPosition({ w / 2, 0.0f });
-    m_backgroundR->setIgnoreCamMovement(true);
-    m_backgroundR->update(0.0f);
+    m_windL = std::make_shared<jt::WindParticles>(
+        jt::Vector2f { GP::GetScreenSize().x / 2.0f, GP::GetScreenSize().y },
+        std::vector<jt::Color> { jt::Color { 255, 255, 255, 80 }, jt::Color { 200, 205, 195, 120 },
+            jt::Color { 130, 130, 165, 130 } });
+    m_windL->setNumberOfParticles(30.0f);
+    m_windL->setWindDirection({ 0.0f, 50.0f });
+    m_windL->setShapeSize({ m_windScaleFactor, m_windScaleFactor });
+    m_windL->setScale(jt::Vector2f { 1.0f, 3.0f } / m_windScaleFactor);
+    add(m_windL);
 
     createPlayer();
 
@@ -237,6 +252,7 @@ void StateGame::updateBulletSpawns(float const elapsed)
 
     auto const velocityOffset = std::sqrt(getAge() / (GP::StageTime() * 7.0f));
     m_velocityMultiplier = 0.65f + velocityOffset;
+    m_windL->m_windSpeedFactor = m_velocityMultiplier;
     float velocityMultiplierL = m_velocityMultiplier;
     float velocityMultiplierR = m_velocityMultiplier;
     if (m_velocityMultiplier >= 2.0f) {
@@ -296,7 +312,7 @@ void StateGame::onUpdate(float const elapsed)
         }
     }
 
-    m_background->update(elapsed);
+    m_backgroundL->update(elapsed);
     m_backgroundR->update(elapsed);
     m_vignette->update(elapsed);
     m_line->update(elapsed);
@@ -304,7 +320,7 @@ void StateGame::onUpdate(float const elapsed)
 
 void StateGame::onDraw() const
 {
-    m_background->draw(renderTarget());
+    m_backgroundL->draw(renderTarget());
     m_backgroundR->draw(renderTarget());
     drawObjects();
     m_vignette->draw();

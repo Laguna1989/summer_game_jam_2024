@@ -3,6 +3,7 @@
 
 #include "heart.hpp"
 #include "screeneffects/trailing_circles.hpp"
+#include "screeneffects/wind_particles.hpp"
 #include "text.hpp"
 #include <box2dwrapper/box2d_world_interface.hpp>
 #include <bullet.hpp>
@@ -27,11 +28,12 @@ class Hud;
 class StateGame : public jt::GameState {
 public:
     StateGame();
+    void createBackground(float w, float h);
 
     std::string getName() const override;
 
 private:
-    std::shared_ptr<jt::Shape> m_background;
+    std::shared_ptr<jt::Shape> m_backgroundL;
     std::shared_ptr<jt::Shape> m_backgroundR;
     std::shared_ptr<jt::Vignette> m_vignette;
     std::shared_ptr<Hud> m_hud;
@@ -42,6 +44,10 @@ private:
 
     int m_scoreP1 { 0 };
     int m_scoreP2 { 0 };
+
+    std::shared_ptr<jt::WindParticles> m_windL { nullptr };
+    std::shared_ptr<jt::WindParticles> m_windR { nullptr };
+    float m_windScaleFactor { 10.0f };
 
     std::shared_ptr<Player> m_playerL { nullptr };
     std::shared_ptr<Player> m_playerR { nullptr };

@@ -17,9 +17,9 @@ jt::WindParticles::WindParticles(
 
 void jt::WindParticles::doCreate()
 {
-    for (auto i = 0u; i != 100u; ++i) {
+    for (auto i = 0u; i != m_numberOfParticles; ++i) {
         auto s = std::make_shared<jt::Shape>();
-        s->makeRect({ 8, 2 }, textureManager());
+        s->makeRect(m_shapeSize, textureManager());
         s->setPosition(jt::Random::getRandomPointIn(m_screenSize));
         s->setScreenSizeHint(m_screenSize);
 
@@ -33,14 +33,14 @@ void jt::WindParticles::doCreate()
 
 void jt::WindParticles::doUpdate(float const elapsed)
 {
-    jt::Vector2f const windSpeed { -150.0f, 0.0f };
     for (auto i = 0u; i != m_shapes.size(); ++i) {
         auto& s = m_shapes.at(i);
+        s->setScale(m_scale);
         auto p = s->getPosition();
         //        float const f =
-        p += windSpeed * elapsed * m_windSpeed * m_factors.at(i);
+        p += m_windDirection * elapsed * m_windSpeedFactor * m_factors.at(i);
         s->setPosition(p);
-        jt::wrapOnScreen(*s.get());
+        jt::wrapOnScreen(*s.get(), std::max(m_shapeSize.x, m_shapeSize.y));
         s->update(elapsed);
     }
 }
@@ -54,6 +54,20 @@ void jt::WindParticles::doDraw() const
         s->draw(renderTarget());
     }
 }
+
+void jt::WindParticles::setNumberOfParticles(std::size_t numberOfParticles)
+{
+    m_numberOfParticles = numberOfParticles;
+}
+
+void jt::WindParticles::setWindDirection(jt::Vector2f const& direction)
+{
+    m_windDirection = direction;
+}
+
+void jt::WindParticles::setShapeSize(jt::Vector2f const& shapeSize) { m_shapeSize = shapeSize; }
+
+void jt::WindParticles::setScale(jt::Vector2f const& scale) { m_scale = scale; }
 
 void jt::WindParticles::setEnabled(bool enabled) { m_enabled = enabled; }
 

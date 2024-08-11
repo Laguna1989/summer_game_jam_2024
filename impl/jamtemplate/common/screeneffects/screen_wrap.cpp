@@ -19,7 +19,7 @@ void jt::wrapOnScreen(jt::DrawableInterface& drawable, float margin)
     if (posScreen.y < -margin) {
         posWorld.y += screenSize.y + margin;
     } else if (posScreen.y > screenSize.y + margin) {
-        posWorld.y -= screenSize.y + margin;
+        posWorld.y -= screenSize.y + margin * 2;
     }
     drawable.setPosition(posWorld);
 }
